@@ -20,6 +20,9 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * Simple JavaBean domain object representing an owner.
  *
@@ -28,6 +31,9 @@ import javax.validation.constraints.NotBlank;
  * @author Sam Brannen
  * @author Michael Isvy
  */
+
+@Getter
+@Setter
 @Entity
 @Table(name = "cliente")
 public class Cliente extends Actor {

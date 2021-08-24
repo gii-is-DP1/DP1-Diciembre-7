@@ -24,11 +24,17 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * Simple JavaBean domain object representing an person.
  *
  * @author Ken Krebs
  */
+
+@Getter
+@Setter
 @MappedSuperclass
 public class Actor{
 
