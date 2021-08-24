@@ -17,6 +17,7 @@ package org.springframework.samples.petclinic.model;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.JoinColumn;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.Email;
@@ -29,7 +30,7 @@ import javax.validation.constraints.NotEmpty;
  * @author Ken Krebs
  */
 @MappedSuperclass
-public class Actor extends BaseEntity {
+public class Actor{
 
 	@Column(name = "nombre")
 	@NotBlank
@@ -45,6 +46,8 @@ public class Actor extends BaseEntity {
 	protected String email;
 	
 	@OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "username", referencedColumnName = "username")
+	private User user;
 	
 
 	public String getNombre() {
