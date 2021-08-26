@@ -6,6 +6,8 @@ import javax.persistence.Table;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 
+import org.springframework.core.style.ToStringCreator;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,7 +17,7 @@ import lombok.Setter;
 @Table(name = "conductor")
 public class Conductor extends Actor{
 	
-	@Column(name = "dni")
+	@Column(name = "dni", unique=true)
 	@NotBlank
 	private String dni;
 	
@@ -98,6 +100,13 @@ public class Conductor extends Actor{
 
 	public void setSalarioPorDia(Double salarioPorDia) {
 		this.salarioPorDia = salarioPorDia;
+	}
+	
+	public String toString() {
+		return new ToStringCreator(this)
+
+				.append("id", this.getId()).append("new", this.isNew()).append("nombre", this.getNombre()).append("dni", this.getDni()).append("ciudad", this.getCiudad())
+				.append("telefono", this.getTelefono()).append("email", this.getEmail()).append("experiencia", this.getExperiencia()).append("salarioBase", this.getSalarioBase()).append("salarioPorDia", this.getSalarioPorDia()).toString();
 	}
 	
 }

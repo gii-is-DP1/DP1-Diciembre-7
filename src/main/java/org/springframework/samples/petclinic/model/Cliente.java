@@ -15,10 +15,21 @@
  */
 package org.springframework.samples.petclinic.model;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
+
+import org.springframework.beans.support.MutableSortDefinition;
+import org.springframework.beans.support.PropertyComparator;
+import org.springframework.core.style.ToStringCreator;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -38,14 +49,17 @@ import lombok.Setter;
 @Table(name = "cliente")
 public class Cliente extends Actor {
 
-	@Column(name = "dni")
-	@NotBlank	
+	@Column(name = "dni", unique = true)
+	@NotBlank
 	private String dni;
 	
 	@Column(name = "direccion")
 	@NotBlank
 	private String direccion;
-
+	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy="reserva")
+	private Set<Reserva> reservas;
+	
 	public String getDni() {
 		return dni;
 	}
@@ -60,6 +74,36 @@ public class Cliente extends Actor {
 
 	public void setDireccion(String direccion) {
 		this.direccion = direccion;
+	}
+	
+	
+	protected Set<Reserva> getReservasInternal(){
+		if(this.reservas == null) {
+			this.reservas = new HashSet<>();		
+			}
+		return this.reservas;
+	}
+	
+	protected void setReservasInternal(Set<Reserva> reservas) {
+		this.reservas = reservas;
+	}
+	
+	public List<Reserva> getReservas(){
+		List<Reserva> sortedReservas = new ArrayList<>(getReservasInternal());
+		PropertyComparator.sort(sortedReservas, new MutableSortDefinition("fechaInicial", false, false));
+		return Collections.unmodifiableList(sortedReservas);
+	}
+	
+	public void addReserva(Reserva reserva) {
+		getReservasInternal().add(reserva);
+		reserva.setCliente(this);
+	}
+	
+	public String toString() {
+		return new ToStringCreator(this)
+
+				.append("id", this.getId()).append("new", this.isNew()).append("nombre", this.getNombre()).append("dni", this.getDni()).append("direccion", this.getDireccion())
+				.append("telefono", this.getTelefono()).append("email", this.getEmail()).toString();
 	}
 		
 	

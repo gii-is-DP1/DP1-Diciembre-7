@@ -42,11 +42,11 @@ public class Actor extends BaseEntity{
 	@NotBlank
 	protected String nombre;
 
-	@Column(name = "telefono")
+	@Column(name = "telefono", unique=true)
 	@NotBlank
 	protected String telefono;
 
-	@Column(name = "email")
+	@Column(name = "email", unique=true)
 	@NotBlank
 	@Email
 	protected String email;
