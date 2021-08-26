@@ -2,6 +2,9 @@ package org.springframework.samples.petclinic.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
@@ -45,7 +48,10 @@ public class Conductor extends Actor{
 	@NotBlank
 	@Min(0)
 	private Double salarioPorDia;
-
+	
+	@OneToMany(mappedBy ="reserva")
+	private Set<Reserva> reservas;
+	
 	public String getDni() {
 		return dni;
 	}
