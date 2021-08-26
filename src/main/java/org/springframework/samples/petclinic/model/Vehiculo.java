@@ -47,9 +47,9 @@ public class Vehiculo extends BaseEntity{
 	@ManyToMany(mappedBy ="vehiculos")
 	private Set<Oficina> oficinas;
 	
-	@OneToOne(cascade = CascadeType.ALL)
+	/*@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name="reserva_id", referencedColumnName = "reserva_id")
-	private Reserva reserva;
+	private Reserva reserva;*/
 
 	public Double getPrecioBase() {
 		return precioBase;
@@ -107,13 +107,13 @@ public class Vehiculo extends BaseEntity{
 		this.oficinas = oficinas;
 	}
 
-	public Reserva getReserva() {
+	/*public Reserva getReserva() {
 		return reserva;
 	}
 
 	public void setReserva(Reserva reserva) {
 		this.reserva = reserva;
-	}
+	}*/
 
 	
 	
