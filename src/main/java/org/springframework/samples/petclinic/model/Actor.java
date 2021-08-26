@@ -20,6 +20,7 @@ import javax.persistence.Column;
 import javax.persistence.JoinColumn;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToOne;
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
@@ -44,6 +45,7 @@ public class Actor extends BaseEntity{
 
 	@Column(name = "telefono", unique=true)
 	@NotBlank
+	@Digits(fraction = 0, integer = 10)
 	protected String telefono;
 
 	@Column(name = "email", unique=true)
