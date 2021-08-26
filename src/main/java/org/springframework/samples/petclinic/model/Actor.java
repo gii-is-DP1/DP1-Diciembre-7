@@ -23,8 +23,6 @@ import javax.persistence.OneToOne;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -45,7 +43,7 @@ public class Actor extends BaseEntity{
 
 	@Column(name = "telefono", unique=true)
 	@NotBlank
-	@Digits(fraction = 0, integer = 10)
+	@Digits(fraction = 0, integer = 9)
 	protected String telefono;
 
 	@Column(name = "email", unique=true)
