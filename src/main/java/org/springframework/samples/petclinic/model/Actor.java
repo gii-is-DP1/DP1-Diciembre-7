@@ -36,7 +36,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @MappedSuperclass
-public class Actor{
+public class Actor extends BaseEntity{
 
 	@Column(name = "nombre")
 	@NotBlank
