@@ -24,7 +24,9 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
@@ -60,6 +62,10 @@ public class Cliente extends Actor {
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy="reserva")
 	private Set<Reserva> reservas;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "username", referencedColumnName = "username")
+	private User user;
 	
 	public String getDni() {
 		return dni;
@@ -100,6 +106,14 @@ public class Cliente extends Actor {
 		reserva.setCliente(this);
 	}
 	
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
 	public String toString() {
 		return new ToStringCreator(this)
 
