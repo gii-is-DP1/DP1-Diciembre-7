@@ -29,7 +29,7 @@ public class Reserva extends BaseEntity{
 	private Double precioFinal;
 	
 	@ManyToOne
-	@JoinColumn(name = "actor_id")
+	@JoinColumn(name = "cliente_id")
 	private Cliente cliente;
 	
 	@OneToOne
@@ -37,7 +37,7 @@ public class Reserva extends BaseEntity{
 	private Vehiculo vehiculo;
 	
 	@ManyToOne
-	@JoinColumn(name="actor_id")
+	@JoinColumn(name="conductor_id")
 	private Conductor conductor;
 
 	public LocalDate getFechaInicio() {
