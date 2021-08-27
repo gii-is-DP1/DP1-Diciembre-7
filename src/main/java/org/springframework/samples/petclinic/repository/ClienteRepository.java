@@ -6,6 +6,6 @@ import org.springframework.samples.petclinic.model.Cliente;
 
 public interface ClienteRepository extends Repository<Cliente, Integer> {
 
-		void save(Cliente cliente) throws DataAccessException;
+	void save(Cliente cliente) throws DataAccessException;
 
 }

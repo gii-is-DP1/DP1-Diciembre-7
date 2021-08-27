@@ -2,9 +2,12 @@ package org.springframework.samples.petclinic.model;
 
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
@@ -51,6 +54,10 @@ public class Conductor extends Actor{
 	
 	@OneToMany(mappedBy ="reserva")
 	private Set<Reserva> reservas;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "username", referencedColumnName = "username")
+	private User user;
 	
 	public String getDni() {
 		return dni;
@@ -108,6 +115,22 @@ public class Conductor extends Actor{
 		this.salarioPorDia = salarioPorDia;
 	}
 	
+	public Set<Reserva> getReservas() {
+		return reservas;
+	}
+
+	public void setReservas(Set<Reserva> reservas) {
+		this.reservas = reservas;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
 	public String toString() {
 		return new ToStringCreator(this)
 
