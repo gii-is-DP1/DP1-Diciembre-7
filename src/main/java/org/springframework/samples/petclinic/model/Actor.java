@@ -51,10 +51,6 @@ public class Actor extends BaseEntity{
 	@Email
 	protected String email;
 	
-	@OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "username", referencedColumnName = "username")
-	private User user;
-	
 
 	public String getNombre() {
 		return this.nombre;
