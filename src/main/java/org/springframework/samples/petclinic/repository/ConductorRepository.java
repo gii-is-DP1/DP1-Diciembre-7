@@ -11,6 +11,9 @@ public interface ConductorRepository extends Repository<Conductor,String>{
 	
 	void save(Conductor conductor) throws DataAccessException;
 	
+	@Query("Select conductor from Conductor conductor where conductor.id =:id")
+	public Conductor findById(@Param("id") int id);
+	
 	@Query("SELECT DISTINCT conductor from Conductor conductor WHERE conductor.ciudad =:ciudad")
 	public Collection<Conductor> findConductoresPorCiudad(@Param("ciudad") String ciudad) throws DataAccessException;
 

@@ -21,6 +21,11 @@ public class EmpresaService {
 		this.empresaRepository = empresaRepository;
 	}
 	
+	@Transactional(readOnly = true)
+	public Empresa findEmpresaById(int id) throws DataAccessException {
+		return empresaRepository.findById(id);
+	}
+	
 	@Transactional
 	public void saveEmpresa(Empresa empresa) throws DataAccessException{
 		empresaRepository.save(empresa);
