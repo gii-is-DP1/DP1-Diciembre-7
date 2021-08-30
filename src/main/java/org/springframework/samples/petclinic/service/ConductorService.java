@@ -43,7 +43,7 @@ public class ConductorService {
 	}
 
 	@Transactional(readOnly = true)
-	public Collection<Conductor> findConductoresPorCiudadPermiso(String ciudad, TipoVehiculo tipoVehiculo,
+	public Collection<Conductor> findConductoresPorCiudadPermisoYFecha(String ciudad, TipoVehiculo tipoVehiculo,
 			LocalDate fechaInicio, LocalDate fechaFinal) throws DataAccessException {
 		Collection<Conductor> conductoresCiudad = conductorRepository.findConductoresPorCiudad(ciudad);
 		Collection<Conductor> conductoresCiudadYPermiso = new HashSet<Conductor>();
