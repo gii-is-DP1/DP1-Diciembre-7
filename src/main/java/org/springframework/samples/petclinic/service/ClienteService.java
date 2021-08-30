@@ -21,6 +21,11 @@ public class ClienteService {
 		this.clienteRepository = clienteRepository;
 	}
 	
+	@Transactional(readOnly = true)
+	public Cliente findClienteById(int id) throws DataAccessException {
+		return clienteRepository.findById(id);
+	}
+	
 	@Transactional
 	public void saveCliente(Cliente cliente) throws DataAccessException{
 		clienteRepository.save(cliente);
