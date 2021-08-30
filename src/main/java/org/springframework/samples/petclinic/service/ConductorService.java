@@ -15,67 +15,71 @@ import org.springframework.samples.petclinic.repository.VehiculoRepository;
 import org.springframework.transaction.annotation.Transactional;
 
 public class ConductorService {
-	
+
 	private ConductorRepository conductorRepository;
-	
+
 	@Autowired
 	private ReservaRepository reservaRepository;
-	
+
 	@Autowired
 	private VehiculoRepository vehiculoRepository;
-	
+
 	@Autowired
 	private UserService userService;
-	
+
 	@Autowired
 	private AuthoritiesService authoritiesService;
-	
+
 	@Autowired
 	public ConductorService(ConductorRepository conductorRepository) {
 		this.conductorRepository = conductorRepository;
 	}
-	
+
 	@Transactional(readOnly = true)
 	public Conductor findConductorById(int id) throws DataAccessException {
 		return conductorRepository.findById(id);
 	}
-	
+
 	@Transactional(readOnly = true)
-	public Collection<Conductor> findConductoresPorCiudadPermiso(String ciudad, TipoVehiculo tipoVehiculo, LocalDate fechaInicio, LocalDate fechaFinal) throws DataAccessException{
+	public Collection<Conductor> findConductoresPorCiudadPermiso(String ciudad, TipoVehiculo tipoVehiculo,
+			LocalDate fechaInicio, LocalDate fechaFinal) throws DataAccessException {
 		Collection<Conductor> conductoresCiudad = conductorRepository.findConductoresPorCiudad(ciudad);
 		Collection<Conductor> conductoresCiudadYPermiso = new HashSet<Conductor>();
 		Collection<TipoVehiculo> tiposVehiculos = vehiculoRepository.findTipoVehiculo();
 		Collection<Conductor> conductoresCiudadPermisoYFecha = new HashSet<Conductor>();
-		for(Conductor c:conductoresCiudad) {
-			if(tiposVehiculos.contains(tipoVehiculo) && c.getPermisoCoche()==true &&(tipoVehiculo.getName().equals("SUV") || tipoVehiculo.getName().equals("Turismo") || tipoVehiculo.getName().equals("Todoterreno") || tipoVehiculo.getName().equals("Furgoneta")) ) {
+		for (Conductor c : conductoresCiudad) {
+			if (tiposVehiculos.contains(tipoVehiculo) && c.getPermisoCoche() == true
+					&& (tipoVehiculo.getName().equals("SUV") || tipoVehiculo.getName().equals("Turismo")
+							|| tipoVehiculo.getName().equals("Todoterreno")
+							|| tipoVehiculo.getName().equals("Furgoneta"))) {
 				conductoresCiudadYPermiso.add(c);
-			}else if(tiposVehiculos.contains(tipoVehiculo) && c.getPermisoBarco()==true && (tipoVehiculo.getName().equals("Lancha") || tipoVehiculo.getName().equals("Velero") || tipoVehiculo.getName().equals("Yate") || tipoVehiculo.getName().equals("motoAgua"))){
+			} else if (tiposVehiculos.contains(tipoVehiculo) && c.getPermisoBarco() == true
+					&& (tipoVehiculo.getName().equals("Lancha") || tipoVehiculo.getName().equals("Velero")
+							|| tipoVehiculo.getName().equals("Yate") || tipoVehiculo.getName().equals("motoAgua"))) {
 				conductoresCiudadYPermiso.add(c);
 			}
 		}
-		for(Conductor c: conductoresCiudadYPermiso) {
-			Collection<Reserva> reservasConductor = reservaRepository.findReservasByConductor(c);
-			for(Reserva r: reservasConductor) {
-				if(r.getFechaInicio().) {
-					
+		for (Conductor c : conductoresCiudadYPermiso) {
+			Collection<Reserva> reservasConductor = reservaRepository.findReservaByConductor(c);
+			for (Reserva r : reservasConductor) {
+				if (!(r.getFechaInicio().equals(fechaInicio)
+						|| (r.getFechaInicio().isAfter(fechaInicio) && r.getFechaInicio().isBefore(fechaFinal))
+						|| r.getFechaFin().equals(fechaFinal)
+						|| (r.getFechaFin().isAfter(fechaInicio)) && r.getFechaFin().isBefore(fechaFinal)
+						|| (r.getFechaInicio().isBefore(fechaInicio) && r.getFechaFin().isAfter(fechaFinal)))) {
+					conductoresCiudadPermisoYFecha.add(c);
 				}
-				
-			}
-			if() {
-				)
-			}else {
-				conductoresCiudadPermisoYFecha.add(c);
 			}
 		}
-		return conductoresCiudadPermisoYFecha;				
+		return conductoresCiudadPermisoYFecha;
 	}
-	
+
 	@Transactional
-	public void SaveConductor(Conductor conductor) throws DataAccessException{
+	public void SaveConductor(Conductor conductor) throws DataAccessException {
 		conductorRepository.save(conductor);
-		
+
 		userService.saveUser(conductor.getUser());
-		
+
 		authoritiesService.saveAuthorities(conductor.getUser().getUsername(), "conductor");
 	}
 
