@@ -60,7 +60,7 @@ public class ConductorService {
 			}
 		}
 		for (Conductor c : conductoresCiudadYPermiso) {
-			Collection<Reserva> reservasConductor = reservaRepository.findReservaByConductor(c);
+			Collection<Reserva> reservasConductor = reservaRepository.findReservasByConductor(c);
 			for (Reserva r : reservasConductor) {
 				if (!(r.getFechaInicio().equals(fechaInicio)
 						|| (r.getFechaInicio().isAfter(fechaInicio) && r.getFechaInicio().isBefore(fechaFinal))
