@@ -5,6 +5,7 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Cliente;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.ClienteService;
@@ -45,7 +46,7 @@ public class ClienteController {
 	}
 
 	@PostMapping(value = "/cliente/new")
-	public String processCreationForm(@Valid Cliente cliente, BindingResult result, ModelMap model) {
+	public String processCreationForm(@Valid Cliente cliente, BindingResult result) throws DataAccessException, DuplicatedTelephoneException, DuplicatedEmailException {
 		if (result.hasErrors()) {
 			model.put("cliente", cliente);
 			return VIEWS_CLIENTE_CREATE_OR_UPDATE;
@@ -80,7 +81,7 @@ public class ClienteController {
 
 	@PostMapping(value = "/cliente/{clienteId}/edit")
 	public String processUpdateClienteForm(@Valid Cliente cliente, BindingResult result,
-			@PathVariable("clienteId") int clienteId, ModelMap model) {
+			@PathVariable("clienteId") int clienteId) throws DataAccessException, DuplicatedTelephoneException, DuplicatedEmailException {
 		if (result.hasErrors()) {
 			model.put("cliente", cliente);
 			return VIEWS_CLIENTE_CREATE_OR_UPDATE;
