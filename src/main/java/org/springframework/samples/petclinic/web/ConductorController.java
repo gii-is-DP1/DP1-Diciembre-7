@@ -6,11 +6,13 @@ import javax.validation.Valid;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Conductor;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.ConductorService;
 import org.springframework.samples.petclinic.service.UserService;
-import org.springframework.samples.petclinic.service.exceptions.DuplicatedTelephoneOrEmailException;
+import org.springframework.samples.petclinic.service.exceptions.DuplicatedEmailException;
+import org.springframework.samples.petclinic.service.exceptions.DuplicatedTelephoneException;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
@@ -44,18 +46,23 @@ public class ConductorController {
 	}
 
 	@PostMapping(value = "/conductor/new")
-	public String processCreationForm(@Valid Conductor conductor, BindingResult result) {
+	public String processCreationForm(@Valid Conductor conductor, BindingResult result) throws DataAccessException, DuplicatedEmailException, DuplicatedTelephoneException {
 		if (result.hasErrors()) {
 			return VIEWS_CONDUCTOR_CREATE_OR_UPDATE;
 		} else {
 			
 			try {
 				this.conductorService.saveConductor(conductor);
-			}catch(DuplicatedTelephoneOrEmailException ex){
+			}catch(DuplicatedTelephoneException ex){
 				result.rejectValue("telefono", "duplicate", "already exists");
 				return VIEWS_CONDUCTOR_CREATE_OR_UPDATE;
 			}
-
+			try {
+				this.conductorService.saveConductor(conductor);
+			} catch (DuplicatedEmailException ex2) {
+				result.rejectValue("email", "duplicate", "already exists");
+				return VIEWS_CONDUCTOR_CREATE_OR_UPDATE;
+			}
 			return "redirect:/conductor/" + conductor.getId();
 		}
 	}
@@ -69,7 +76,7 @@ public class ConductorController {
 
 	@PostMapping(value = "/conductor/{conductorId}/edit")
 	public String processUpdateConductorForm(@Valid Conductor conductor, BindingResult result,
-			@PathVariable("conductorId") int conductorId) {
+			@PathVariable("conductorId") int conductorId) throws DataAccessException, DuplicatedEmailException, DuplicatedTelephoneException {
 		if (result.hasErrors()) {
 			return VIEWS_CONDUCTOR_CREATE_OR_UPDATE;
 		} else {
@@ -77,12 +84,16 @@ public class ConductorController {
 			BeanUtils.copyProperties(conductor, conductorToUpdate, "id", "reservas");
 			try {
 				this.conductorService.saveConductor(conductorToUpdate);
-			}catch(DuplicatedTelephoneOrEmailException ex){
+			}catch(DuplicatedTelephoneException ex1){
 				result.rejectValue("telefono", "duplicate", "already exists");
 				return VIEWS_CONDUCTOR_CREATE_OR_UPDATE;
 			}
-			conductor.setId(conductorId);
-			this.conductorService.saveConductor(conductor);
+			try {
+				this.conductorService.saveConductor(conductorToUpdate);
+			} catch (DuplicatedEmailException ex2) {
+				result.rejectValue("email", "duplicate", "already exists");
+				return VIEWS_CONDUCTOR_CREATE_OR_UPDATE;
+			}
 			return "redirect:/conductor/{conductorId}";
 		}
 	}

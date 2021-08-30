@@ -1,5 +1,5 @@
 package org.springframework.samples.petclinic.service.exceptions;
 
-public class DuplicatedTelephoneOrEmailException extends Exception{
+public class DuplicatedEmailException extends Exception{
 
 }
