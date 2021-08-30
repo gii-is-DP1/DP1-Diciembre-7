@@ -76,17 +76,18 @@ public class ConductorService {
 		return conductoresCiudadPermisoYFecha;
 	}
 
-	@Transactional(rollbackFor = {DuplicatedTelephoneException.class , DuplicatedEmailException.class})
-	public void saveConductor(Conductor conductor) throws DataAccessException, DuplicatedTelephoneException , DuplicatedEmailException{
+	@Transactional(rollbackFor = { DuplicatedTelephoneException.class, DuplicatedEmailException.class })
+	public void saveConductor(Conductor conductor)
+			throws DataAccessException, DuplicatedTelephoneException, DuplicatedEmailException {
 		Conductor existentEmailConductor = conductorRepository.findByEmail(conductor.getEmail());
-		
+
 		Conductor existentTelefonoConductor = conductorRepository.findByTelefono(conductor.getTelefono());
 
 		if (existentEmailConductor != null) {
 			throw new DuplicatedEmailException();
-			
-		}else if(existentTelefonoConductor !=null){
-			
+
+		} else if (existentTelefonoConductor != null) {
+
 			throw new DuplicatedTelephoneException();
 		} else {
 
