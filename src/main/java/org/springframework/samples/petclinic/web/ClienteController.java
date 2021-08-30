@@ -9,7 +9,10 @@ import org.springframework.samples.petclinic.model.Cliente;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.ClienteService;
 import org.springframework.samples.petclinic.service.UserService;
+import org.springframework.samples.petclinic.service.exceptions.DuplicatedEmailException;
+import org.springframework.samples.petclinic.service.exceptions.DuplicatedTelephoneException;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,11 +45,27 @@ public class ClienteController {
 	}
 
 	@PostMapping(value = "/cliente/new")
-	public String processCreationForm(@Valid Cliente cliente, BindingResult result) {
+	public String processCreationForm(@Valid Cliente cliente, BindingResult result, ModelMap model) {
 		if (result.hasErrors()) {
+			model.put("cliente", cliente);
 			return VIEWS_CLIENTE_CREATE_OR_UPDATE;
 		} else {
-			this.clienteService.saveCliente(cliente);
+			try {
+				this.clienteService.saveCliente(cliente);
+				model.addAttribute("message", "Se ha registrado correctamente.");
+			} catch(DuplicatedTelephoneException ex) {
+				result.rejectValue("telefono", "duplicated", "already exists");
+				model.put("cliente", cliente);
+				model.addAttribute("message", "Ya existe un cliente con este telefono.");
+				return VIEWS_CLIENTE_CREATE_OR_UPDATE;
+			}catch(DuplicatedEmailException ex1) {
+				result.rejectValue("email", "duplicated", "already exists");
+				model.put("cliente", cliente);
+				model.addAttribute("message", "Ya existe un cliente con este email.");
+				return VIEWS_CLIENTE_CREATE_OR_UPDATE;
+
+			}
+			
 
 			return "redirect:/cliente/" + cliente.getId();
 		}
@@ -61,14 +80,31 @@ public class ClienteController {
 
 	@PostMapping(value = "/cliente/{clienteId}/edit")
 	public String processUpdateClienteForm(@Valid Cliente cliente, BindingResult result,
-			@PathVariable("clienteId") int clienteId) {
+			@PathVariable("clienteId") int clienteId, ModelMap model) {
 		if (result.hasErrors()) {
+			model.put("cliente", cliente);
 			return VIEWS_CLIENTE_CREATE_OR_UPDATE;
 		} else {
-			cliente.setId(clienteId);
-			this.clienteService.saveCliente(cliente);
-			return "redirect:/conductor/{conductorId}";
+			try {
+				cliente.setId(clienteId);
+				this.clienteService.saveCliente(cliente);
+				model.addAttribute("message", "Sus datos se han actualizado correctamente.");
+			}catch(DuplicatedTelephoneException ex) {
+				result.rejectValue("telefono", "duplicated", "already exists");
+				model.put("cliente", cliente);
+				model.addAttribute("message", "Ya existe un cliente con este telefono.");
+				return VIEWS_CLIENTE_CREATE_OR_UPDATE;
+			}catch(DuplicatedEmailException ex1) {
+				result.rejectValue("email", "duplicated", "already exists");
+				model.put("cliente", cliente);
+				model.addAttribute("message", "Ya existe un cliente con este email.");
+				return VIEWS_CLIENTE_CREATE_OR_UPDATE;
+			}
+			
+			return "redirect:/cliente/{clienteId}";
+	
 		}
+
 	}
 
 	@GetMapping("/cliente/{clienteId}")
