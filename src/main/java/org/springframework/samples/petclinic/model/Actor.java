@@ -1,5 +1,4 @@
 /*
- * Copyright 2002-2013 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +14,8 @@
  */
 package org.springframework.samples.petclinic.model;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.JoinColumn;
 import javax.persistence.MappedSuperclass;
-import javax.persistence.OneToOne;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -35,22 +31,21 @@ import lombok.Setter;
 @Getter
 @Setter
 @MappedSuperclass
-public class Actor extends BaseEntity{
+public class Actor extends BaseEntity {
 
 	@Column(name = "nombre")
 	@NotBlank
 	protected String nombre;
 
-	@Column(name = "telefono", unique=true)
+	@Column(name = "telefono", unique = true)
 	@NotBlank
 	@Digits(fraction = 0, integer = 9)
-	protected String telefono;
+	protected Integer telefono;
 
-	@Column(name = "email", unique=true)
+	@Column(name = "email", unique = true)
 	@NotBlank
 	@Email
 	protected String email;
-	
 
 	public String getNombre() {
 		return this.nombre;
@@ -60,11 +55,11 @@ public class Actor extends BaseEntity{
 		this.nombre = nombre;
 	}
 
-	public String getTelefono() {
+	public Integer getTelefono() {
 		return telefono;
 	}
 
-	public void setTelefono(String telefono) {
+	public void setTelefono(Integer telefono) {
 		this.telefono = telefono;
 	}
 
