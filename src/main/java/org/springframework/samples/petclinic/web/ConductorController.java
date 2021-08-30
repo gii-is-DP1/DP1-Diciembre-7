@@ -87,7 +87,7 @@ public class ConductorController {
 			return VIEWS_CONDUCTOR_CREATE_OR_UPDATE;
 		} else {
 			Conductor conductorToUpdate = this.conductorService.findConductorById(conductorId);
-			BeanUtils.copyProperties(conductor, conductorToUpdate, "id", "reservas");
+			BeanUtils.copyProperties(conductor, conductorToUpdate, "id", "reserva");
 			try {
 				this.conductorService.saveConductor(conductorToUpdate);
 				model.addAttribute("Message", "Se ha actualizado correctamente");

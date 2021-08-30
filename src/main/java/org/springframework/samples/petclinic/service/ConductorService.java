@@ -43,7 +43,7 @@ public class ConductorService {
 	}
 
 	@Transactional(readOnly = true)
-	public Collection<Conductor> findConductoresPorCiudadPermiso(String ciudad, TipoVehiculo tipoVehiculo,
+	public Collection<Conductor> findConductoresPorCiudadPermisoYFecha(String ciudad, TipoVehiculo tipoVehiculo,
 			LocalDate fechaInicio, LocalDate fechaFinal) throws DataAccessException {
 		Collection<Conductor> conductoresCiudad = conductorRepository.findConductoresPorCiudad(ciudad);
 		Collection<Conductor> conductoresCiudadYPermiso = new HashSet<Conductor>();
@@ -83,12 +83,13 @@ public class ConductorService {
 
 		Conductor existentTelefonoConductor = conductorRepository.findByTelefono(conductor.getTelefono());
 
-		if (existentEmailConductor != null) {
+		if (existentEmailConductor != null && !(existentEmailConductor.getId().equals(conductor.getId()))) {
 			throw new DuplicatedEmailException();
 
-		} else if (existentTelefonoConductor != null) {
+		} else if (existentTelefonoConductor != null && !(existentTelefonoConductor.getId().equals(conductor.getId()))) {
 
 			throw new DuplicatedTelephoneException();
+			
 		} else {
 
 			conductorRepository.save(conductor);
