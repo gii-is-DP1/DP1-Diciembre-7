@@ -45,7 +45,8 @@ public class ClienteController {
 	}
 
 	@PostMapping(value = "/cliente/new")
-	public String processCreationForm(@Valid Cliente cliente, BindingResult result) throws DataAccessException, DuplicatedTelephoneException, DuplicatedEmailException {
+	public String processCreationForm(@Valid Cliente cliente, BindingResult result)
+			throws DataAccessException, DuplicatedTelephoneException, DuplicatedEmailException {
 		if (result.hasErrors()) {
 			return VIEWS_CLIENTE_CREATE_OR_UPDATE;
 		} else {
@@ -64,7 +65,8 @@ public class ClienteController {
 
 	@PostMapping(value = "/cliente/{clienteId}/edit")
 	public String processUpdateClienteForm(@Valid Cliente cliente, BindingResult result,
-			@PathVariable("clienteId") int clienteId) throws DataAccessException, DuplicatedTelephoneException, DuplicatedEmailException {
+			@PathVariable("clienteId") int clienteId)
+			throws DataAccessException, DuplicatedTelephoneException, DuplicatedEmailException {
 		if (result.hasErrors()) {
 			return VIEWS_CLIENTE_CREATE_OR_UPDATE;
 		} else {
