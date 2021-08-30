@@ -44,7 +44,7 @@ public class Actor extends BaseEntity{
 	@Column(name = "telefono", unique=true)
 	@NotBlank
 	@Digits(fraction = 0, integer = 9)
-	protected String telefono;
+	protected Integer telefono;
 
 	@Column(name = "email", unique=true)
 	@NotBlank
@@ -60,11 +60,11 @@ public class Actor extends BaseEntity{
 		this.nombre = nombre;
 	}
 
-	public String getTelefono() {
+	public Integer getTelefono() {
 		return telefono;
 	}
 
-	public void setTelefono(String telefono) {
+	public void setTelefono(Integer telefono) {
 		this.telefono = telefono;
 	}
 

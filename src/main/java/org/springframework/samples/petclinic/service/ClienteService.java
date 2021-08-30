@@ -26,13 +26,22 @@ public class ClienteService {
 		return clienteRepository.findById(id);
 	}
 	
-	@Transactional
-	public void saveCliente(Cliente cliente) throws DataAccessException{
-		clienteRepository.save(cliente);
+	@Transactional(rollbackFor = DuplicatedTelephoneOrEmailException.class)
+	public void saveCliente(Cliente cliente) throws DataAccessException, DuplicatedTelephoneOrEmailException{
+		Cliente cE = clienteRepository.findByEmail(cliente.getEmail());
+		Cliente cT = clienteRepository.findByTelefono(cliente.getTelefono());
+		if((cT != null) || (cE != null)) {
+			throw new DuplicatedTelephoneOrEmailException();
+		}else {
+			
+			clienteRepository.save(cliente);
+			
+			userService.saveUser(cliente.getUser());
+			
+			authoritiesService.saveAuthorities(cliente.getUser().getUsername(), "cliente");
+			
+		}
 		
-		userService.saveUser(cliente.getUser());
-		
-		authoritiesService.saveAuthorities(cliente.getUser().getUsername(), "cliente");
 	}
 
 }

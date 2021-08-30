@@ -10,6 +10,12 @@ public interface ClienteRepository extends Repository<Cliente, Integer> {
 	
 	@Query("Select cliente from Cliente cliente where cliente.id =:id")
 	public Cliente findById(@Param("id") int id);
+	
+	@Query("SELECT cliente FROM Cliente cliente where cliente.email =:email")
+	Cliente findByEmail(@Param("email") String email);
+	
+	@Query("SELECT cliente FROM Cliente cliente where cliente.telefono =:telefono")
+	Cliente findByTelefono(@Param("telefono") Integer telefono);
 
 	void save(Cliente cliente) throws DataAccessException;
 
