@@ -130,6 +130,7 @@ public class Conductor extends Actor{
 	public void setUser(User user) {
 		this.user = user;
 	}
+	
 
 	public String toString() {
 		return new ToStringCreator(this)

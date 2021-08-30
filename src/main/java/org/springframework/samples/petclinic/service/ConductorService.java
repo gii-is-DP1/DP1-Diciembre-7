@@ -12,6 +12,7 @@ import org.springframework.samples.petclinic.model.TipoVehiculo;
 import org.springframework.samples.petclinic.repository.ConductorRepository;
 import org.springframework.samples.petclinic.repository.ReservaRepository;
 import org.springframework.samples.petclinic.repository.VehiculoRepository;
+import org.springframework.samples.petclinic.service.exceptions.DuplicatedTelephoneOrEmailException;
 import org.springframework.transaction.annotation.Transactional;
 
 public class ConductorService {
@@ -74,13 +75,27 @@ public class ConductorService {
 		return conductoresCiudadPermisoYFecha;
 	}
 
-	@Transactional
-	public void SaveConductor(Conductor conductor) throws DataAccessException {
-		conductorRepository.save(conductor);
+	@Transactional(rollbackFor = DuplicatedTelephoneOrEmailException.class)
+	public void saveConductor(Conductor conductor) throws DataAccessException, DuplicatedTelephoneOrEmailException {
+		Conductor existentEmailConductor = conductorRepository.findByEmail(conductor.getEmail());
+		
+		Conductor existentTelefonoConductor = conductorRepository.findByTelefono(conductor.getTelefono());
 
-		userService.saveUser(conductor.getUser());
+		if (existentEmailConductor != null) {
+			throw new DuplicatedTelephoneOrEmailException();
+			
+		}else if(existentTelefonoConductor !=null){
+			
+			throw new DuplicatedTelephoneOrEmailException();
+		} else {
 
-		authoritiesService.saveAuthorities(conductor.getUser().getUsername(), "conductor");
+			conductorRepository.save(conductor);
+
+			userService.saveUser(conductor.getUser());
+
+			authoritiesService.saveAuthorities(conductor.getUser().getUsername(), "conductor");
+		}
+
 	}
 
 }
