@@ -14,6 +14,7 @@ import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedEmailException;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedTelephoneException;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -47,24 +48,25 @@ public class ConductorController {
 	}
 
 	@PostMapping(value = "/conductor/new")
-	public String processCreationForm(@Valid Conductor conductor, BindingResult result)
+	public String processCreationForm(@Valid Conductor conductor, BindingResult result, ModelMap model)
 			throws DataAccessException, DuplicatedEmailException, DuplicatedTelephoneException {
 		if (result.hasErrors()) {
+			model.put("conductor", conductor);
 			return VIEWS_CONDUCTOR_CREATE_OR_UPDATE;
 		} else {
-
 			try {
 				this.conductorService.saveConductor(conductor);
+				model.addAttribute("Message", "Se ha registrado correctamente");
 			} catch (DuplicatedTelephoneException ex) {
 				result.rejectValue("telefono", "duplicate", "already exists");
+				model.put("conductor", conductor);
 				return VIEWS_CONDUCTOR_CREATE_OR_UPDATE;
-			}
-			try {
-				this.conductorService.saveConductor(conductor);
 			} catch (DuplicatedEmailException ex2) {
 				result.rejectValue("email", "duplicate", "already exists");
+				model.put("conductor", conductor);
 				return VIEWS_CONDUCTOR_CREATE_OR_UPDATE;
 			}
+			model.put("conductor", conductor);
 			return "redirect:/conductor/" + conductor.getId();
 		}
 	}
@@ -78,23 +80,24 @@ public class ConductorController {
 
 	@PostMapping(value = "/conductor/{conductorId}/edit")
 	public String processUpdateConductorForm(@Valid Conductor conductor, BindingResult result,
-			@PathVariable("conductorId") int conductorId)
+			@PathVariable("conductorId") int conductorId, ModelMap model)
 			throws DataAccessException, DuplicatedEmailException, DuplicatedTelephoneException {
 		if (result.hasErrors()) {
+			model.put("conductor", conductor);
 			return VIEWS_CONDUCTOR_CREATE_OR_UPDATE;
 		} else {
 			Conductor conductorToUpdate = this.conductorService.findConductorById(conductorId);
 			BeanUtils.copyProperties(conductor, conductorToUpdate, "id", "reservas");
 			try {
 				this.conductorService.saveConductor(conductorToUpdate);
+				model.addAttribute("Message", "Se ha actualizado correctamente");
 			} catch (DuplicatedTelephoneException ex1) {
 				result.rejectValue("telefono", "duplicate", "already exists");
+				model.put("conductor", conductor);
 				return VIEWS_CONDUCTOR_CREATE_OR_UPDATE;
-			}
-			try {
-				this.conductorService.saveConductor(conductorToUpdate);
 			} catch (DuplicatedEmailException ex2) {
 				result.rejectValue("email", "duplicate", "already exists");
+				model.put("conductor", conductor);
 				return VIEWS_CONDUCTOR_CREATE_OR_UPDATE;
 			}
 			return "redirect:/conductor/{conductorId}";
