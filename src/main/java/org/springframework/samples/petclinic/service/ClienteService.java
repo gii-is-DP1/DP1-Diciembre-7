@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Cliente;
 import org.springframework.samples.petclinic.repository.ClienteRepository;
+import org.springframework.samples.petclinic.service.exceptions.DuplicatedTelephoneException;
+import org.springframework.samples.petclinic.service.exceptions.DuplicatedEmailException;
 import org.springframework.transaction.annotation.Transactional;
 
 public class ClienteService {
@@ -26,12 +28,14 @@ public class ClienteService {
 		return clienteRepository.findById(id);
 	}
 	
-	@Transactional(rollbackFor = DuplicatedTelephoneOrEmailException.class)
-	public void saveCliente(Cliente cliente) throws DataAccessException, DuplicatedTelephoneOrEmailException{
+	@Transactional(rollbackFor = {DuplicatedTelephoneException.class, DuplicatedEmailException.class})
+	public void saveCliente(Cliente cliente) throws DataAccessException, DuplicatedTelephoneException, DuplicatedEmailException{
 		Cliente cE = clienteRepository.findByEmail(cliente.getEmail());
 		Cliente cT = clienteRepository.findByTelefono(cliente.getTelefono());
-		if((cT != null) || (cE != null)) {
-			throw new DuplicatedTelephoneOrEmailException();
+		if(cT != null) {
+			throw new DuplicatedTelephoneException();
+		}else if(cE != null){
+			throw new DupicatedEmailException();
 		}else {
 			
 			clienteRepository.save(cliente);
