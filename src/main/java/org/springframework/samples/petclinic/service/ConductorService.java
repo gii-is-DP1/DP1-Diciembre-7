@@ -12,7 +12,8 @@ import org.springframework.samples.petclinic.model.TipoVehiculo;
 import org.springframework.samples.petclinic.repository.ConductorRepository;
 import org.springframework.samples.petclinic.repository.ReservaRepository;
 import org.springframework.samples.petclinic.repository.VehiculoRepository;
-import org.springframework.samples.petclinic.service.exceptions.DuplicatedTelephoneOrEmailException;
+import org.springframework.samples.petclinic.service.exceptions.DuplicatedEmailException;
+import org.springframework.samples.petclinic.service.exceptions.DuplicatedTelephoneException;
 import org.springframework.transaction.annotation.Transactional;
 
 public class ConductorService {
@@ -75,18 +76,18 @@ public class ConductorService {
 		return conductoresCiudadPermisoYFecha;
 	}
 
-	@Transactional(rollbackFor = DuplicatedTelephoneOrEmailException.class)
-	public void saveConductor(Conductor conductor) throws DataAccessException, DuplicatedTelephoneOrEmailException {
+	@Transactional(rollbackFor = {DuplicatedTelephoneException.class , DuplicatedEmailException.class})
+	public void saveConductor(Conductor conductor) throws DataAccessException, DuplicatedTelephoneException , DuplicatedEmailException{
 		Conductor existentEmailConductor = conductorRepository.findByEmail(conductor.getEmail());
 		
 		Conductor existentTelefonoConductor = conductorRepository.findByTelefono(conductor.getTelefono());
 
 		if (existentEmailConductor != null) {
-			throw new DuplicatedTelephoneOrEmailException();
+			throw new DuplicatedEmailException();
 			
 		}else if(existentTelefonoConductor !=null){
 			
-			throw new DuplicatedTelephoneOrEmailException();
+			throw new DuplicatedTelephoneException();
 		} else {
 
 			conductorRepository.save(conductor);
