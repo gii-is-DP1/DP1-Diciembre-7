@@ -32,9 +32,9 @@ public class ClienteService {
 	public void saveCliente(Cliente cliente) throws DataAccessException, DuplicatedTelephoneException, DuplicatedEmailException{
 		Cliente cE = clienteRepository.findByEmail(cliente.getEmail());
 		Cliente cT = clienteRepository.findByTelefono(cliente.getTelefono());
-		if(cT != null) {
+		if((cT != null) && !(cT.getId().equals(cliente.getId()))) {
 			throw new DuplicatedTelephoneException();
-		}else if(cE != null){
+		}else if((cE != null) && !(cE.getId().equals(cliente.getId()))){
 			throw new DuplicatedEmailException();
 		}else {
 			
