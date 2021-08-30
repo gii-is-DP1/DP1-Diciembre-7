@@ -35,7 +35,7 @@ public class ClienteService {
 		if(cT != null) {
 			throw new DuplicatedTelephoneException();
 		}else if(cE != null){
-			throw new DupicatedEmailException();
+			throw new DuplicatedEmailException();
 		}else {
 			
 			clienteRepository.save(cliente);
