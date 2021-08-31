@@ -15,7 +15,7 @@ public interface EmpresaRepository extends Repository<Empresa,String>{
 	public Empresa findByEmail(@Param("email") String email);
 	
 	@Query("SELECT empresa FROM Empresa empresa WHERE empresa.telefono =:telefono")
-	public Empresa findByTelefono(@Param("telefono") Integer telefono);
+	public Empresa findByTelefono(@Param("telefono") String string);
 	
 	void save(Empresa empresa) throws DataAccessException;
 

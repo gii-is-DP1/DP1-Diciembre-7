@@ -22,6 +22,14 @@ public class Authorities extends BaseEntity{
 	
 	@Size(min = 3, max = 50)
 	String authority;
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public void setAuthority(String role) {
+		this.authority = role;
+	}
 	
 	
 }
