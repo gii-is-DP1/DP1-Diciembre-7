@@ -1,15 +1,25 @@
 package org.springframework.samples.petclinic.web;
 
+import java.util.Collection;
 import java.util.Map;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Oficina;
 import org.springframework.samples.petclinic.repository.OficinaRepository;
 import org.springframework.samples.petclinic.service.OficinaService;
+import org.springframework.samples.petclinic.service.exceptions.DuplicatedOfficeAddressException;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class OficinaController {
@@ -35,7 +45,55 @@ public class OficinaController {
 		return VIEWS_OFICINA_CREATE_OR_UPDATE_FORM;
 	}
 	
-	//@PostMapping(value = "/oficina/new")
-	//public String processCreationForm(@Valid )
+	@PostMapping(value = "/oficina/new")
+	public String processCreationForm(@Valid Oficina oficina, BindingResult result, ModelMap model)
+			throws DataAccessException, DuplicatedOfficeAddressException{
+		if(result.hasErrors()) {
+			model.put("oficina", oficina);
+			return VIEWS_OFICINA_CREATE_OR_UPDATE_FORM;
+		}else {
+			try {
+				this.oficinaService.saveOficina(oficina);
+				model.addAttribute("message", "La oficina se ha añadido correctamente");
+			}catch(DuplicatedOfficeAddressException ex) {
+				result.rejectValue("direccion", "duplicated", "already exists");
+				model.put("oficina", oficina);
+				model.addAttribute("message", "Ya existe una oficina con esta direccion");
+				return VIEWS_OFICINA_CREATE_OR_UPDATE_FORM;
+			}
+			return "redirect:/oficina/" + oficina.getId();
+		}
+	}
+	
+	@GetMapping(value = "/oficinas/find")
+	public String initFindForm(Map<String, Object> model) {
+		model.put("oficina", new Oficina());
+		return "oficinas/findOficinas";
+	}
+	
+	@GetMapping(value = "/oficinas/findOficinas")
+	public String processFindForm(Oficina oficina, BindingResult result, ModelMap model) {
+		if (oficina.getCiudad() == null) {
+			oficina.setCiudad("");
+		}
+		
+		Collection<Oficina> results = this.oficinaService.findOficinaByCiudad(oficina.getCiudad());
+		if(results.isEmpty()) {
+			result.rejectValue("ciudad", "notFound", "not found");
+			return "oficinas/findOficinas";
+		}else {
+			model.put("selections", results);
+			return "oficinas/oficinasList";
+		}
+	}
+	
+	@GetMapping("/oficina/{oficinaId}")
+	public ModelAndView showOficina(@PathVariable("oficinaId") int oficinaId) {
+		ModelAndView mav = new ModelAndView("oficina/oficinaDetails");
+		mav.addObject(this.oficinaService.findOficinaById(oficinaId));
+		return mav;
+	}
+	
+	
 
 }
