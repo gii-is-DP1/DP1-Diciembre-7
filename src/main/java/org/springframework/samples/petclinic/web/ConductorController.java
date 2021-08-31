@@ -14,6 +14,7 @@ import org.springframework.samples.petclinic.model.TipoVehiculo;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.ConductorService;
 import org.springframework.samples.petclinic.service.UserService;
+import org.springframework.samples.petclinic.service.exceptions.DuplicatedDNIException;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedEmailException;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedTelephoneException;
 import org.springframework.stereotype.Controller;
@@ -55,7 +56,7 @@ public class ConductorController {
 
 	@PostMapping(value = "/conductor/new")
 	public String processCreationForm(@Valid Conductor conductor, BindingResult result, ModelMap model)
-			throws DataAccessException, DuplicatedEmailException, DuplicatedTelephoneException {
+			throws DataAccessException, DuplicatedEmailException, DuplicatedTelephoneException, DuplicatedDNIException {
 		if (result.hasErrors()) {
 			model.put("conductor", conductor);
 			return VIEWS_CONDUCTOR_CREATE_OR_UPDATE;
@@ -67,8 +68,12 @@ public class ConductorController {
 				result.rejectValue("telefono", "duplicate", "already exists");
 				model.put("conductor", conductor);
 				return VIEWS_CONDUCTOR_CREATE_OR_UPDATE;
-			} catch (DuplicatedEmailException ex2) {
+			} catch (DuplicatedEmailException ex1) {
 				result.rejectValue("email", "duplicate", "already exists");
+				model.put("conductor", conductor);
+				return VIEWS_CONDUCTOR_CREATE_OR_UPDATE;
+			} catch (DuplicatedDNIException ex2) {
+				result.rejectValue("dni", "duplicate", "already exists");
 				model.put("conductor", conductor);
 				return VIEWS_CONDUCTOR_CREATE_OR_UPDATE;
 			}
@@ -87,7 +92,7 @@ public class ConductorController {
 	@PostMapping(value = "/conductor/{conductorId}/edit")
 	public String processUpdateConductorForm(@Valid Conductor conductor, BindingResult result,
 			@PathVariable("conductorId") int conductorId, ModelMap model)
-			throws DataAccessException, DuplicatedEmailException, DuplicatedTelephoneException {
+			throws DataAccessException, DuplicatedEmailException, DuplicatedTelephoneException, DuplicatedDNIException {
 		if (result.hasErrors()) {
 			model.put("conductor", conductor);
 			return VIEWS_CONDUCTOR_CREATE_OR_UPDATE;
@@ -101,8 +106,12 @@ public class ConductorController {
 				result.rejectValue("telefono", "duplicate", "already exists");
 				model.put("conductor", conductor);
 				return VIEWS_CONDUCTOR_CREATE_OR_UPDATE;
-			} catch (DuplicatedEmailException ex2) {
+			} catch (DuplicatedEmailException ex1) {
 				result.rejectValue("email", "duplicate", "already exists");
+				model.put("conductor", conductor);
+				return VIEWS_CONDUCTOR_CREATE_OR_UPDATE;
+			} catch (DuplicatedDNIException ex2) {
+				result.rejectValue("dni", "duplicate", "already exists");
 				model.put("conductor", conductor);
 				return VIEWS_CONDUCTOR_CREATE_OR_UPDATE;
 			}

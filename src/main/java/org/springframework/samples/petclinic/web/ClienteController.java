@@ -10,6 +10,7 @@ import org.springframework.samples.petclinic.model.Cliente;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.ClienteService;
 import org.springframework.samples.petclinic.service.UserService;
+import org.springframework.samples.petclinic.service.exceptions.DuplicatedDNIException;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedEmailException;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedTelephoneException;
 import org.springframework.stereotype.Controller;
@@ -67,7 +68,10 @@ public class ClienteController {
 				model.put("cliente", cliente);
 				model.addAttribute("message", "Ya existe un cliente con este email.");
 				return VIEWS_CLIENTE_CREATE_OR_UPDATE;
-
+			}catch(DuplicatedDNIException ex2) {
+				result.rejectValue("dni", "duplicated", "already exists");
+				model.put("cliente", cliente);
+				model.addAttribute("message","Ya existe un cliente con este DNI");
 			}
 
 			return "redirect:/cliente/" + cliente.getId();
@@ -103,6 +107,10 @@ public class ClienteController {
 				model.put("cliente", cliente);
 				model.addAttribute("message", "Ya existe un cliente con este email.");
 				return VIEWS_CLIENTE_CREATE_OR_UPDATE;
+			}catch(DuplicatedDNIException ex2) {
+				result.rejectValue("dni", "duplicated", "already exists");
+				model.put("cliente", cliente);
+				model.addAttribute("message","Ya existe un cliente con este DNI");
 			}
 
 			return "redirect:/cliente/{clienteId}";

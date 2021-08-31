@@ -6,9 +6,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+
 
 @Getter
 @Setter
@@ -22,6 +22,14 @@ public class Authorities extends BaseEntity{
 	
 	@Size(min = 3, max = 50)
 	String authority;
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public void setAuthority(String role) {
+		this.authority = role;
+	}
 
 	
 	

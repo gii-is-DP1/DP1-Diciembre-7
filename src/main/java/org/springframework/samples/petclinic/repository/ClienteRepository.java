@@ -12,10 +12,13 @@ public interface ClienteRepository extends Repository<Cliente, Integer> {
 	public Cliente findById(@Param("id") int id);
 	
 	@Query("SELECT cliente FROM Cliente cliente WHERE cliente.email =:email")
-	Cliente findByEmail(@Param("email") String email);
+	public Cliente findByEmail(@Param("email") String email);
 	
 	@Query("SELECT cliente FROM Cliente cliente WHERE cliente.telefono =:telefono")
-	Cliente findByTelefono(@Param("telefono") String string);
+	public Cliente findByTelefono(@Param("telefono") String string);
+	
+	@Query("SELECT cliente FROM Cliente cliente WHERE cliente.dni =:dni")
+	public Cliente findByDNI(@Param("dni") String dni);
 
 	void save(Cliente cliente) throws DataAccessException;
 

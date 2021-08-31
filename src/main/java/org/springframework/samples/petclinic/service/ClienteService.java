@@ -6,6 +6,7 @@ import org.springframework.samples.petclinic.model.Cliente;
 import org.springframework.samples.petclinic.repository.ClienteRepository;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedTelephoneException;
 import org.springframework.stereotype.Service;
+import org.springframework.samples.petclinic.service.exceptions.DuplicatedDNIException;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedEmailException;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,14 +32,18 @@ public class ClienteService {
 	}
 	
 	@Transactional(rollbackFor = {DuplicatedTelephoneException.class, DuplicatedEmailException.class})
-	public void saveCliente(Cliente cliente) throws DataAccessException, DuplicatedTelephoneException, DuplicatedEmailException{
+	public void saveCliente(Cliente cliente) throws DataAccessException, DuplicatedTelephoneException, DuplicatedEmailException, DuplicatedDNIException{
 		Cliente cE = clienteRepository.findByEmail(cliente.getEmail());
 		Cliente cT = clienteRepository.findByTelefono(cliente.getTelefono());
+		Cliente cD = clienteRepository.findByDNI(cliente.getDni());
+
 		if((cT != null) && !(cT.getId().equals(cliente.getId()))) {
 			throw new DuplicatedTelephoneException();
 		}else if((cE != null) && !(cE.getId().equals(cliente.getId()))){
 			throw new DuplicatedEmailException();
-		}else {		
+		}else if((cD != null) && !(cE.getId().equals(cliente.getId()))) {
+			throw new  DuplicatedDNIException();
+		}else {	
 			clienteRepository.save(cliente);
 			
 			userService.saveUser(cliente.getUser());

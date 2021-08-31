@@ -12,6 +12,7 @@ import org.springframework.samples.petclinic.model.TipoVehiculo;
 import org.springframework.samples.petclinic.repository.ConductorRepository;
 import org.springframework.samples.petclinic.repository.ReservaRepository;
 import org.springframework.samples.petclinic.repository.VehiculoRepository;
+import org.springframework.samples.petclinic.service.exceptions.DuplicatedDNIException;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedEmailException;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedTelephoneException;
 import org.springframework.stereotype.Service;
@@ -80,17 +81,23 @@ public class ConductorService {
 
 	@Transactional(rollbackFor = { DuplicatedTelephoneException.class, DuplicatedEmailException.class })
 	public void saveConductor(Conductor conductor)
-			throws DataAccessException, DuplicatedTelephoneException, DuplicatedEmailException {
-		Conductor existentEmailConductor = conductorRepository.findByEmail(conductor.getEmail());
+			throws DataAccessException, DuplicatedTelephoneException, DuplicatedEmailException, DuplicatedDNIException {
+		Conductor eC = conductorRepository.findByEmail(conductor.getEmail());
 
-		Conductor existentTelefonoConductor = conductorRepository.findByTelefono(conductor.getTelefono());
+		Conductor tC = conductorRepository.findByTelefono(conductor.getTelefono());
+		
+		Conductor dC = conductorRepository.findByTelefono(conductor.getDni());
 
-		if (existentEmailConductor != null && !(existentEmailConductor.getId().equals(conductor.getId()))) {
+		if (eC != null && !(eC.getId().equals(conductor.getId()))) {
 			throw new DuplicatedEmailException();
 
-		} else if (existentTelefonoConductor != null && !(existentTelefonoConductor.getId().equals(conductor.getId()))) {
+		} else if (tC != null && !(tC.getId().equals(conductor.getId()))) {
 
 			throw new DuplicatedTelephoneException();
+			
+		} else if (dC != null && !(dC.getId().equals(conductor.getId()))) {
+
+			throw new DuplicatedDNIException();
 			
 		} else {
 
