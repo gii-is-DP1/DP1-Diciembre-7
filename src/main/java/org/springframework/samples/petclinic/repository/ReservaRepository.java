@@ -13,7 +13,6 @@ import org.springframework.samples.petclinic.model.Vehiculo;
 
 public interface ReservaRepository extends CrudRepository<Reserva, Integer>{
 	
-	//Reservas por conductor
 	@Query("SELECT reserva FROM Reserva reserva WHERE reserva.conductor=:conductor")
 	Collection<Reserva> findReservasByConductor(@Param("conductor") Conductor conductor) throws DataAccessException;
 	
