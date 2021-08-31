@@ -6,7 +6,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
 
-<petclinic:layout pageName="clientes">
+<petclinic:layout pageName="cliente">
     <h2>
         <c:if test="${cliente['new']}">New </c:if> Cliente
     </h2>
@@ -18,7 +18,7 @@
             <petclinic:inputField label="DNI" name="dni"/>
             <petclinic:inputField label="Direccion" name="direccion"/>
             <petclinic:inputField label="Username" name="user.username"/>
-            <petclinic:inputField label="Password" name="user.password"/>
+            <petclinic:inputField label="Password" name="user.password"/> 
         </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
