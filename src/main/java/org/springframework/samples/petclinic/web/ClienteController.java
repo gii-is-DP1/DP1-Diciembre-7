@@ -90,8 +90,8 @@ public class ClienteController {
 			model.put("cliente", cliente);
 			return VIEWS_CLIENTE_CREATE_OR_UPDATE;
 		} else {
+			cliente.setId(clienteId);
 			try {
-				cliente.setId(clienteId);
 				this.clienteService.saveCliente(cliente);
 				model.addAttribute("message", "Sus datos se han actualizado correctamente.");
 			} catch (DuplicatedTelephoneException ex) {

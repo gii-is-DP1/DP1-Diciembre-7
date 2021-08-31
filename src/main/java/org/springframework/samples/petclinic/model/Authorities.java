@@ -22,6 +22,7 @@ public class Authorities extends BaseEntity{
 	
 	@Size(min = 3, max = 50)
 	String authority;
+
 	
 	
 }

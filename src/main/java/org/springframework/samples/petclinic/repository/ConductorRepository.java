@@ -21,5 +21,5 @@ public interface ConductorRepository extends Repository<Conductor,String>{
 	public Conductor findByEmail(@Param("email") String email);
 	
 	@Query("SELECT conductor from Conductor conductor WHERE conductor.telefono =:telefono")
-	public Conductor findByTelefono(@Param("telefono") Integer telefono);
+	public Conductor findByTelefono(@Param("telefono") String string);
 }
