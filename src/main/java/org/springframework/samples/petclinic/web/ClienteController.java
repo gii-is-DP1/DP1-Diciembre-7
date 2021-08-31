@@ -46,7 +46,7 @@ public class ClienteController {
 	}
 
 	@PostMapping(value = "/cliente/new")
-	public String processCreationForm(@Valid Cliente cliente, BindingResult result)
+	public String processCreationForm(@Valid Cliente cliente, BindingResult result, ModelMap model)
 			throws DataAccessException, DuplicatedTelephoneException, DuplicatedEmailException {
 		if (result.hasErrors()) {
 			model.put("cliente", cliente);
@@ -55,19 +55,18 @@ public class ClienteController {
 			try {
 				this.clienteService.saveCliente(cliente);
 				model.addAttribute("message", "Se ha registrado correctamente.");
-			} catch(DuplicatedTelephoneException ex) {
+			} catch (DuplicatedTelephoneException ex) {
 				result.rejectValue("telefono", "duplicated", "already exists");
 				model.put("cliente", cliente);
 				model.addAttribute("message", "Ya existe un cliente con este telefono.");
 				return VIEWS_CLIENTE_CREATE_OR_UPDATE;
-			}catch(DuplicatedEmailException ex1) {
+			} catch (DuplicatedEmailException ex1) {
 				result.rejectValue("email", "duplicated", "already exists");
 				model.put("cliente", cliente);
 				model.addAttribute("message", "Ya existe un cliente con este email.");
 				return VIEWS_CLIENTE_CREATE_OR_UPDATE;
 
 			}
-			
 
 			return "redirect:/cliente/" + cliente.getId();
 		}
@@ -82,7 +81,7 @@ public class ClienteController {
 
 	@PostMapping(value = "/cliente/{clienteId}/edit")
 	public String processUpdateClienteForm(@Valid Cliente cliente, BindingResult result,
-			@PathVariable("clienteId") int clienteId)
+			@PathVariable("clienteId") int clienteId, ModelMap model)
 			throws DataAccessException, DuplicatedTelephoneException, DuplicatedEmailException {
 		if (result.hasErrors()) {
 			model.put("cliente", cliente);
@@ -92,20 +91,20 @@ public class ClienteController {
 				cliente.setId(clienteId);
 				this.clienteService.saveCliente(cliente);
 				model.addAttribute("message", "Sus datos se han actualizado correctamente.");
-			}catch(DuplicatedTelephoneException ex) {
+			} catch (DuplicatedTelephoneException ex) {
 				result.rejectValue("telefono", "duplicated", "already exists");
 				model.put("cliente", cliente);
 				model.addAttribute("message", "Ya existe un cliente con este telefono.");
 				return VIEWS_CLIENTE_CREATE_OR_UPDATE;
-			}catch(DuplicatedEmailException ex1) {
+			} catch (DuplicatedEmailException ex1) {
 				result.rejectValue("email", "duplicated", "already exists");
 				model.put("cliente", cliente);
 				model.addAttribute("message", "Ya existe un cliente con este email.");
 				return VIEWS_CLIENTE_CREATE_OR_UPDATE;
 			}
-			
+
 			return "redirect:/cliente/{clienteId}";
-	
+
 		}
 
 	}
