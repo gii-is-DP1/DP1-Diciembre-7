@@ -27,7 +27,7 @@ public class Empresa extends Actor{
 	@NotBlank
 	private String pais;
 	
-	@OneToMany(mappedBy ="oficina")
+	@OneToMany(mappedBy ="empresa")
 	private Set<Oficina> oficinas;
 	
 	@OneToOne(cascade = CascadeType.ALL)

@@ -48,7 +48,7 @@ public class Vehiculo extends BaseEntity{
 	private Set<Oficina> oficinas;
 	
 	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name="reserva_id", referencedColumnName = "reserva_id")
+	@JoinColumn(name="reserva_id", referencedColumnName = "id")
 	private Reserva reserva;
 
 	public Double getPrecioBase() {
