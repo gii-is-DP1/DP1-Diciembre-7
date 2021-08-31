@@ -52,7 +52,7 @@ public class Conductor extends Actor{
 	@Min(0)
 	private Double salarioPorDia;
 	
-	@OneToMany(mappedBy ="reserva")
+	@OneToMany(mappedBy ="conductor")
 	private Set<Reserva> reservas;
 	
 	@OneToOne(cascade = CascadeType.ALL)

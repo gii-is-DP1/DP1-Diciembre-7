@@ -60,7 +60,7 @@ public class Cliente extends Actor {
 	@NotBlank
 	private String direccion;
 	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy="reserva")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy="cliente")
 	private Set<Reserva> reservas;
 	
 	@OneToOne(cascade = CascadeType.ALL)
