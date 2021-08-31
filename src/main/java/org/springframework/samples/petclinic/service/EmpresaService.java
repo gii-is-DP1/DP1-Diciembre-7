@@ -6,8 +6,10 @@ import org.springframework.samples.petclinic.model.Empresa;
 import org.springframework.samples.petclinic.repository.EmpresaRepository;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedEmailException;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedTelephoneException;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Service
 public class EmpresaService {
 
 	private EmpresaRepository empresaRepository;
