@@ -36,14 +36,12 @@ public class ClienteService {
 			throw new DuplicatedTelephoneException();
 		}else if((cE != null) && !(cE.getId().equals(cliente.getId()))){
 			throw new DuplicatedEmailException();
-		}else {
-			
+		}else {		
 			clienteRepository.save(cliente);
 			
 			userService.saveUser(cliente.getUser());
 			
-			authoritiesService.saveAuthorities(cliente.getUser().getUsername(), "cliente");
-			
+			authoritiesService.saveAuthorities(cliente.getUser().getUsername(), "cliente");		
 		}
 		
 	}

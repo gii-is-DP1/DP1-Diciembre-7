@@ -8,8 +8,14 @@ import org.springframework.samples.petclinic.model.Empresa;
 
 public interface EmpresaRepository extends Repository<Empresa,String>{
 	
-	@Query("Select empresa from Empresa empresa where empresa.id =:id")
+	@Query("SELECT empresa FROM Empresa empresa WHERE empresa.id =:id")
 	public Empresa findById(@Param("id") int id);
+	
+	@Query("SELECT empresa FROM Empresa empresa WHERE empresa.email =:email")
+	public Empresa findByEmail(@Param("email") String email);
+	
+	@Query("SELECT empresa FROM Empresa empresa WHERE empresa.telefono =:telefono")
+	public Empresa findByTelefono(@Param("telefono") Integer telefono);
 	
 	void save(Empresa empresa) throws DataAccessException;
 
