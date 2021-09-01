@@ -40,16 +40,13 @@ public class ReservaController {
 
 	@Autowired
 	ReservaController(ReservaService reservaService, VehiculoService vehiculoService,
-			ConductorService conductorService) {
+			ConductorService conductorService, ClienteService clienteService) {
 		this.reservaService = reservaService;
 		this.vehiculoService = vehiculoService;
 		this.conductorService = conductorService;
+		this.clienteService = clienteService;
 	}
 	
-	@ModelAttribute("vehiculos")
-	public Collection<Vehiculo> populateVehiculos(){
-		return this.vehiculoService.find;
-	}
 	@ModelAttribute("cliente")
 	public Cliente findCliente(@PathVariable("clienteid") int clienteId) {
 		return this.clienteService.findClienteById(clienteId);
