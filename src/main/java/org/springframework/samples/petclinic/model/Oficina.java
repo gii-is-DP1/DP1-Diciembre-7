@@ -10,6 +10,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.persistence.JoinColumn;
 
 @Entity
@@ -25,7 +26,6 @@ public class Oficina extends BaseEntity{
 	private String direccion;
 	
 	@Column(name="codigoPostal")
-	@NotBlank
 	private Integer codigoPostal;
 	
 	@ManyToMany(cascade = CascadeType.ALL)
