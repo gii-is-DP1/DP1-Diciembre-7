@@ -119,7 +119,7 @@ public class VehiculoController {
 	}
     
     @GetMapping("/vehiculo/{vehiculoId}")
-	public ModelAndView showOficina(@PathVariable("vehiculoId") int vehiculoId) {
+	public ModelAndView showVehiculo(@PathVariable("vehiculoId") int vehiculoId) {
 		ModelAndView mav = new ModelAndView("vehiculo/vehiculoDetails");
 		mav.addObject(this.vehiculoService.findVehiculoById(vehiculoId));
 		return mav;
