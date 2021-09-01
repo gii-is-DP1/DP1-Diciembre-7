@@ -69,6 +69,11 @@ public class Oficina extends BaseEntity{
 	public void setVehiculos(Set<Vehiculo> vehiculos) {
 		this.vehiculos = vehiculos;
 	}
+	
+	public void addVehiculo(Vehiculo vehiculo) {
+		getVehiculos().add(vehiculo);
+		vehiculo.getOficinas().add(this);
+	}
 
 	public Empresa getEmpresa() {
 		return empresa;

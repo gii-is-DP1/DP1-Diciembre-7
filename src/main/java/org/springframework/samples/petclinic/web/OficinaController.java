@@ -7,8 +7,11 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.model.Empresa;
 import org.springframework.samples.petclinic.model.Oficina;
+import org.springframework.samples.petclinic.model.Owner;
 import org.springframework.samples.petclinic.repository.OficinaRepository;
+import org.springframework.samples.petclinic.service.EmpresaService;
 import org.springframework.samples.petclinic.service.OficinaService;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedOfficeAddressException;
 import org.springframework.stereotype.Controller;
@@ -17,6 +20,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -27,32 +31,46 @@ public class OficinaController {
 	private static final String VIEWS_OFICINA_CREATE_OR_UPDATE_FORM = "oficina/createOrUpdateOficinaForm";
 	
 	private final OficinaService oficinaService;
+	private final EmpresaService empresaService;
 	
 	@Autowired
-	public OficinaController(OficinaService oficinaService) {
+	public OficinaController(OficinaService oficinaService, EmpresaService empresaService) {
 		this.oficinaService = oficinaService;
+		this.empresaService = empresaService;
 	}
 	
-	@InitBinder
-	public void setAllowedFields(WebDataBinder dataBinder) {
+	@ModelAttribute("empresa")
+	public Empresa findEmpresa(@PathVariable("empresaId") int empresaId) {
+		return this.empresaService.findEmpresaById(empresaId);
+	}
+	
+	@InitBinder("empresa")
+	public void initEmpresaBinder(WebDataBinder dataBinder) {
+		dataBinder.setDisallowedFields("id");
+	}
+	
+	@InitBinder("oficina")
+	public void initOficinaBinder(WebDataBinder dataBinder) {
 		dataBinder.setDisallowedFields("id");
 	}
 	
 	@GetMapping(value = "/oficina/new")
-	public String initCreationForm(Map<String, Object> model) {
+	public String initCreationForm(Empresa empresa, Map<String, Object> model) {
 		Oficina oficina = new Oficina();
+		empresa.addOficina(oficina);
 		model.put("oficina", oficina);
 		return VIEWS_OFICINA_CREATE_OR_UPDATE_FORM;
 	}
 	
 	@PostMapping(value = "/oficina/new")
-	public String processCreationForm(@Valid Oficina oficina, BindingResult result, ModelMap model)
+	public String processCreationForm(Empresa empresa, @Valid Oficina oficina, BindingResult result, ModelMap model)
 			throws DataAccessException, DuplicatedOfficeAddressException{
 		if(result.hasErrors()) {
 			model.put("oficina", oficina);
 			return VIEWS_OFICINA_CREATE_OR_UPDATE_FORM;
 		}else {
 			try {
+				empresa.addOficina(oficina);
 				this.oficinaService.saveOficina(oficina);
 				model.addAttribute("message", "La oficina se ha añadido correctamente");
 			}catch(DuplicatedOfficeAddressException ex) {
