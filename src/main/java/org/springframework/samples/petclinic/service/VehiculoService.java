@@ -3,6 +3,7 @@ package org.springframework.samples.petclinic.service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +31,9 @@ public class VehiculoService {
 	private OficinaRepository oficinaRepository;
 
 	@Autowired
-	public VehiculoService(VehiculoRepository vehiculoRepository) {
+	public VehiculoService(VehiculoRepository vehiculoRepository, ReservaRepository reservaRepository) {
 		this.vehiculoRepository = vehiculoRepository;
+		this.reservaRepository = reservaRepository;
 	}
 
 	@Transactional(readOnly = true)
@@ -47,12 +49,18 @@ public class VehiculoService {
 	@Transactional(readOnly = true)
 	public Collection<Vehiculo> findVehiculosPorCiudadYFechaDisponibles(String ciudad, LocalDate fechaInicio,
 			LocalDate fechaFin) throws DataAccessException {
-		Collection<Vehiculo> vehiculosCiudad = vehiculoRepository.findVehiculosPorCiudad(ciudad);
+		Collection<Collection<Vehiculo>> vehiculosCiudad = vehiculoRepository.findVehiculosPorCiudad(ciudad);
+		Set<Vehiculo> vehiculosCiudadAplanado = new HashSet<>();
+		for(Collection<Vehiculo> vehiculos:vehiculosCiudad) {
+			for(Vehiculo v: vehiculos) {
+				vehiculosCiudadAplanado.add(v);
+			}
+		}
 		Collection<Vehiculo> vehiculosCiudadYFechaDisponibles = new ArrayList<>();
-		for (Vehiculo v : vehiculosCiudad) {
+		for (Vehiculo v : vehiculosCiudadAplanado) {
 			Integer stock = v.getStock();
 			Integer acum = 0;
-			Collection<Reserva> reservasVehiculo = vehiculoRepository.findReservasByVehiculo(v);
+			Collection<Reserva> reservasVehiculo = reservaRepository.findReservasByVehiculo(v);
 			for (Reserva r : reservasVehiculo) {
 				if (r.getFechaInicio().equals(fechaInicio)
 						|| (r.getFechaInicio().isAfter(fechaInicio) && r.getFechaInicio().isBefore(fechaFin))
