@@ -49,7 +49,6 @@ public class Vehiculo extends BaseEntity{
 	private Set<Oficina> oficinas;
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "vehiculo")
-	@JoinColumn(name="reserva_id")
 	private Set<Reserva> reservas;
 
 	public Double getPrecioBase() {

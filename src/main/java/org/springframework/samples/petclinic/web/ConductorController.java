@@ -9,7 +9,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Conductor;
-import org.springframework.samples.petclinic.model.Conductores;
 import org.springframework.samples.petclinic.model.TipoVehiculo;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.ConductorService;
@@ -61,6 +60,11 @@ public class ConductorController {
 			model.put("conductor", conductor);
 			return VIEWS_CONDUCTOR_CREATE_OR_UPDATE;
 		} else {
+			if(conductor.getPermisoBarco().equals(false) && conductor.getPermisoCoche().equals(false)) {
+				model.put("conductor", "conductor");
+				model.addAttribute("message","Tiene que tener algun permiso como minimo");
+				return VIEWS_CONDUCTOR_CREATE_OR_UPDATE;
+			}
 			try {
 				this.conductorService.saveConductor(conductor);
 				model.addAttribute("Message", "Se ha registrado correctamente");
@@ -118,26 +122,7 @@ public class ConductorController {
 			return "redirect:/conductor/{conductorId}";
 		}
 	}
-/*
-	@GetMapping(value = { "/conductores" })
-	public String showConductoresDisponiblesList(String ciudad, TipoVehiculo tipoVehiculo, LocalDate fechaInicio,
-			LocalDate fechaFin, Map<String, Object> model) {
-		Conductores conductores = new Conductores();
-		conductores.getConductoresList().addAll(this.conductorService.findConductoresPorCiudadPermisoYFecha(ciudad,
-				tipoVehiculo, fechaInicio, fechaFin));
-		model.put("conductores", conductores);
-		return "conductores/conductorList";
 
-	}
-
-	@GetMapping(value = { "/conductores.xml" })
-	public @ResponseBody Conductores showResourcesConductorList() {
-		Conductores conductores = new Conductores();
-		conductores.getConductoresList().addAll(this.conductorService
-				.findConductoresPorCiudadPermisoYFecha(VIEWS_CONDUCTOR_CREATE_OR_UPDATE, null, null, null));
-		return conductores;
-	}
-*/
 	@GetMapping("/conductor/{conductorId}")
 	public ModelAndView showConductor(@PathVariable("conductorId") int conductorId) {
 		ModelAndView mav = new ModelAndView("conductor/conductorDetails");

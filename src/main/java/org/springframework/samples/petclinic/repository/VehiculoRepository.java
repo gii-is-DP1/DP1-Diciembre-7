@@ -16,12 +16,8 @@ public interface VehiculoRepository extends CrudRepository<Vehiculo, Integer>{
 	@Query("SELECT tipoVehiculo FROM TipoVehiculo tipoVehiculo ORDER BY tipoVehiculo.name")
 	List<TipoVehiculo> findTipoVehiculo() throws DataAccessException;
 	
-	@Query("SELECT DISTINCT vehiculo FROM Vehiculo vehiculo left join fetch vehiculo.oficinas WHERE vehiculo.ciudad =:ciudad")
-	public Collection<Vehiculo> findVehiculosPorCiudad(@Param("ciudad") String ciudad);
-	
-	@Query("SELECT Reserva FROM Reserva reserva left join fetch reserva.vehiculos WHERE reserva.vehiculo =:vehiculo")
-	public Collection<Reserva> findReservasByVehiculo(@Param("vehiculo") Vehiculo vehiculo);
-
+	@Query("SELECT vehiculos FROM Oficina oficina WHERE oficina.ciudad =:ciudad")
+	public Collection<Collection<Vehiculo>> findVehiculosPorCiudad(@Param("ciudad") String ciudad);	
 	
 	Vehiculo findById(int id) throws DataAccessException;
 
