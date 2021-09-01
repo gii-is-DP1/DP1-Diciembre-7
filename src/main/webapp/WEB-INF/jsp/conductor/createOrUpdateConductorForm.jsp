@@ -28,7 +28,7 @@
 					<petclinic:inputField label="Salario base" name="salarioBase" />
 					<petclinic:inputField label="Salario por dia" name="salarioPorDia" />
 					<petclinic:inputField label="Username" name="user.username" />
-					<petclinic:inputField label="Password" name="user.password" />
+					<petclinic:inputField label="Password" name="user.password" hidden=true/>
 				</div>
 			</c:when>
 			<c:otherwise>

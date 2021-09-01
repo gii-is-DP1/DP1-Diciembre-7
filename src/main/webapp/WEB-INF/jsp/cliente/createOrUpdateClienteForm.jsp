@@ -26,10 +26,13 @@
 				</div>
 			</c:when>
 			<c:otherwise>
+				<input type="hidden" name="dni" value="${cliente.dni}"/>
+				<input type="hidden" name="username" value="${username}"/>
+				<input type="hidden" name="password" value="${password}"/>
 				<petclinic:inputField label="Nombre" name="nombre" />
 				<petclinic:inputField label="Telefono" name="telefono" />
 				<petclinic:inputField label="Email" name="email" />
-				<petclinic:inputField label="Direccion" name="direccion" />
+				<petclinic:inputField label="Direccion" name="direccion"/>
 			</c:otherwise>
 		</c:choose>
 		<div class="form-group">

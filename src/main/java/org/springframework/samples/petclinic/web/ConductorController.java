@@ -1,6 +1,5 @@
 package org.springframework.samples.petclinic.web;
 
-import java.time.LocalDate;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -9,7 +8,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Conductor;
-import org.springframework.samples.petclinic.model.TipoVehiculo;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.ConductorService;
 import org.springframework.samples.petclinic.service.UserService;
@@ -25,7 +23,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -63,6 +60,18 @@ public class ConductorController {
 			if(conductor.getPermisoBarco().equals(false) && conductor.getPermisoCoche().equals(false)) {
 				model.put("conductor", "conductor");
 				model.addAttribute("message","Tiene que tener algun permiso como minimo");
+				return VIEWS_CONDUCTOR_CREATE_OR_UPDATE;
+			}
+			if (!(DNIValidator.validarDNI(conductor.getDni()))) {
+				model.put("conductor", conductor);
+				model.addAttribute("message",
+						"El DNI introducido no cumple el patron de un DNI. Son 8 digitos y 1 letra");
+				return VIEWS_CONDUCTOR_CREATE_OR_UPDATE;
+			}
+			if(!(TelefonoValidator.validarTelefono(conductor.getTelefono()))) {
+				model.put("conductor", conductor);
+				model.addAttribute("message",
+						"El telefono debe tener 9 numeros");
 				return VIEWS_CONDUCTOR_CREATE_OR_UPDATE;
 			}
 			try {
@@ -103,6 +112,18 @@ public class ConductorController {
 		} else {
 			Conductor conductorToUpdate = this.conductorService.findConductorById(conductorId);
 			BeanUtils.copyProperties(conductor, conductorToUpdate, "id", "reserva");
+			if (!(DNIValidator.validarDNI(conductor.getDni()))) {
+				model.put("conductor", conductor);
+				model.addAttribute("message",
+						"El DNI introducido no cumple el patron de un DNI. Son 8 digitos y 1 letra");
+				return VIEWS_CONDUCTOR_CREATE_OR_UPDATE;
+			}
+			if(!(TelefonoValidator.validarTelefono(conductor.getTelefono()))) {
+				model.put("conductor", conductor);
+				model.addAttribute("message",
+						"El telefono debe tener 9 numeros");
+				return VIEWS_CONDUCTOR_CREATE_OR_UPDATE;
+			}
 			try {
 				this.conductorService.saveConductorUpdate(conductorToUpdate);
 				model.addAttribute("Message", "Se ha actualizado correctamente");

@@ -21,7 +21,7 @@
 					<petclinic:inputField label="Email" name="email" />
 					<petclinic:inputField label="Pais" name="pais" />
 					<petclinic:inputField label="Username" name="user.username" />
-					<petclinic:inputField label="Password" name="user.password" />
+					<petclinic:inputField label="Password" name="user.password" hidden=true/>
 				</div>
 			</c:when>
 			<c:otherwise>

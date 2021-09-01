@@ -4,6 +4,7 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Cliente;
@@ -56,6 +57,18 @@ public class ClienteController {
 			model.put("cliente", cliente);
 			return VIEWS_CLIENTE_CREATE_OR_UPDATE;
 		} else {
+			if (!(DNIValidator.validarDNI(cliente.getDni()))) {
+				model.put("cliente", cliente);
+				model.addAttribute("message",
+						"El DNI introducido no cumple el patron de un DNI. Son 8 digitos y 1 letra");
+				return VIEWS_CLIENTE_CREATE_OR_UPDATE;
+			}
+			if(!(TelefonoValidator.validarTelefono(cliente.getTelefono()))) {
+				model.put("cliente", cliente);
+				model.addAttribute("message",
+						"El telefono debe tener 9 numeros");
+				return VIEWS_CLIENTE_CREATE_OR_UPDATE;
+			}
 			try {
 				this.clienteService.saveCliente(cliente);
 				model.addAttribute("message", "Se ha registrado correctamente.");
@@ -69,10 +82,10 @@ public class ClienteController {
 				model.put("cliente", cliente);
 				model.addAttribute("message", "Ya existe un cliente con este email.");
 				return VIEWS_CLIENTE_CREATE_OR_UPDATE;
-			}catch(DuplicatedDNIException ex2) {
+			} catch (DuplicatedDNIException ex2) {
 				result.rejectValue("dni", "duplicated", "already exists");
 				model.put("cliente", cliente);
-				model.addAttribute("message","Ya existe un cliente con este DNI");
+				model.addAttribute("message", "Ya existe un cliente con este DNI");
 			}
 
 			return "redirect:/cliente/" + cliente.getId();
@@ -94,9 +107,23 @@ public class ClienteController {
 			model.put("cliente", cliente);
 			return VIEWS_CLIENTE_CREATE_OR_UPDATE;
 		} else {
+			Cliente clienteToUpdate=this.clienteService.findClienteById(clienteId);
+			BeanUtils.copyProperties(cliente, clienteToUpdate, "id", "reservas","user");
 			cliente.setId(clienteId);
+			if (!(DNIValidator.validarDNI(clienteToUpdate.getDni()))) {
+				model.put("cliente", cliente);
+				model.addAttribute("message",
+						"El DNI introducido no cumple el patron de un DNI. Son 8 digitos y 1 letra");
+				return VIEWS_CLIENTE_CREATE_OR_UPDATE;
+			}
+			if(!(TelefonoValidator.validarTelefono(clienteToUpdate.getTelefono()))) {
+				model.put("cliente", cliente);
+				model.addAttribute("message",
+						"El telefono debe tener 9 numeros");
+				return VIEWS_CLIENTE_CREATE_OR_UPDATE;
+			}
 			try {
-				this.clienteService.saveClienteUpdate(cliente);
+				this.clienteService.saveClienteUpdate(clienteToUpdate);
 				model.addAttribute("message", "Sus datos se han actualizado correctamente.");
 			} catch (DuplicatedTelephoneException ex) {
 				result.rejectValue("telefono", "duplicated", "already exists");
@@ -108,10 +135,10 @@ public class ClienteController {
 				model.put("cliente", cliente);
 				model.addAttribute("message", "Ya existe un cliente con este email.");
 				return VIEWS_CLIENTE_CREATE_OR_UPDATE;
-			}catch(DuplicatedDNIException ex2) {
+			} catch (DuplicatedDNIException ex2) {
 				result.rejectValue("dni", "duplicated", "already exists");
 				model.put("cliente", cliente);
-				model.addAttribute("message","Ya existe un cliente con este DNI");
+				model.addAttribute("message", "Ya existe un cliente con este DNI");
 			}
 
 			return "redirect:/cliente/{clienteId}";
