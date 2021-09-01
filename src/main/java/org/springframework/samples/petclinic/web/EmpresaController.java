@@ -87,7 +87,7 @@ public class EmpresaController {
 			return VIEWS_EMPRESA_CREATE_OR_UPDATE;
 		} else {
 			try {
-				this.empresaService.saveEmpresa(empresa);
+				this.empresaService.saveEmpresaUpdate(empresa);
 				model.addAttribute("message", "Sus datos se han actualizado correctamente");
 			} catch (DuplicatedTelephoneException ex) {
 				result.rejectValue("telefono", "duplicated", "already exists");

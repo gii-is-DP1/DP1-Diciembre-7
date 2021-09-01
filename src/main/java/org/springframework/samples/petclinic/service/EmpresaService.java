@@ -48,5 +48,23 @@ public class EmpresaService {
 		}
 
 	}
+	
+	@Transactional(rollbackFor = { DuplicatedTelephoneException.class, DuplicatedEmailException.class })
+	public void saveEmpresaUpdate(Empresa empresa)
+			throws DataAccessException, DuplicatedTelephoneException, DuplicatedEmailException {
+		Empresa eE = empresaRepository.findByEmail(empresa.getEmail());
+		Empresa eT = empresaRepository.findByTelefono(empresa.getTelefono());
+		if (eT != null && !(eT.getId().equals(empresa.getId()))) {
+			throw new DuplicatedTelephoneException();
+		} else if (eE != null && (eE.getId().equals(empresa.getId()))) {
+			throw new DuplicatedEmailException();
+		} else {
+			empresaRepository.save(empresa);
+
+			userService.saveUser(empresa.getUser());
+
+		}
+
+	}
 
 }

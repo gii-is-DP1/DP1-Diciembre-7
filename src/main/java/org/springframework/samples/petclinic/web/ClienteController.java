@@ -96,7 +96,7 @@ public class ClienteController {
 		} else {
 			cliente.setId(clienteId);
 			try {
-				this.clienteService.saveCliente(cliente);
+				this.clienteService.saveClienteUpdate(cliente);
 				model.addAttribute("message", "Sus datos se han actualizado correctamente.");
 			} catch (DuplicatedTelephoneException ex) {
 				result.rejectValue("telefono", "duplicated", "already exists");

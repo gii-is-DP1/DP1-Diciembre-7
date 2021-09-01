@@ -100,7 +100,7 @@ public class ConductorController {
 			Conductor conductorToUpdate = this.conductorService.findConductorById(conductorId);
 			BeanUtils.copyProperties(conductor, conductorToUpdate, "id", "reserva");
 			try {
-				this.conductorService.saveConductor(conductorToUpdate);
+				this.conductorService.saveConductorUpdate(conductorToUpdate);
 				model.addAttribute("Message", "Se ha actualizado correctamente");
 			} catch (DuplicatedTelephoneException ex1) {
 				result.rejectValue("telefono", "duplicate", "already exists");
@@ -118,7 +118,7 @@ public class ConductorController {
 			return "redirect:/conductor/{conductorId}";
 		}
 	}
-
+/*
 	@GetMapping(value = { "/conductores" })
 	public String showConductoresDisponiblesList(String ciudad, TipoVehiculo tipoVehiculo, LocalDate fechaInicio,
 			LocalDate fechaFin, Map<String, Object> model) {
@@ -130,14 +130,14 @@ public class ConductorController {
 
 	}
 
-	/*
-	 * @GetMapping(value = { "/conductores.xml"}) public @ResponseBody Conductores
-	 * showResourcesConductorList() { Conductores conductores = new Conductores();
-	 * conductores.getConductoresList().addAll(this.conductorService.
-	 * findConductoresPorCiudadPermisoYFecha(VIEWS_CONDUCTOR_CREATE_OR_UPDATE, null,
-	 * null, null)); return conductores; }
-	 */
-
+	@GetMapping(value = { "/conductores.xml" })
+	public @ResponseBody Conductores showResourcesConductorList() {
+		Conductores conductores = new Conductores();
+		conductores.getConductoresList().addAll(this.conductorService
+				.findConductoresPorCiudadPermisoYFecha(VIEWS_CONDUCTOR_CREATE_OR_UPDATE, null, null, null));
+		return conductores;
+	}
+*/
 	@GetMapping("/conductor/{conductorId}")
 	public ModelAndView showConductor(@PathVariable("conductorId") int conductorId) {
 		ModelAndView mav = new ModelAndView("conductor/conductorDetails");
