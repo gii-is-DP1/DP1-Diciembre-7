@@ -83,22 +83,15 @@ public class ConductorService {
 	public void saveConductor(Conductor conductor)
 			throws DataAccessException, DuplicatedTelephoneException, DuplicatedEmailException, DuplicatedDNIException {
 		Conductor eC = conductorRepository.findByEmail(conductor.getEmail());
-
 		Conductor tC = conductorRepository.findByTelefono(conductor.getTelefono());
-		
 		Conductor dC = conductorRepository.findByTelefono(conductor.getDni());
 
 		if (eC != null && !(eC.getId().equals(conductor.getId()))) {
 			throw new DuplicatedEmailException();
-
 		} else if (tC != null && !(tC.getId().equals(conductor.getId()))) {
-
 			throw new DuplicatedTelephoneException();
-			
 		} else if (dC != null && !(dC.getId().equals(conductor.getId()))) {
-
 			throw new DuplicatedDNIException();
-			
 		} else {
 
 			conductorRepository.save(conductor);
@@ -106,6 +99,29 @@ public class ConductorService {
 			userService.saveUser(conductor.getUser());
 
 			authoritiesService.saveAuthorities(conductor.getUser().getUsername(), "conductor");
+		}
+
+	}
+	
+	@Transactional(rollbackFor = { DuplicatedTelephoneException.class, DuplicatedEmailException.class })
+	public void saveConductorUpdate(Conductor conductor)
+			throws DataAccessException, DuplicatedTelephoneException, DuplicatedEmailException, DuplicatedDNIException {
+		Conductor eC = conductorRepository.findByEmail(conductor.getEmail());
+		Conductor tC = conductorRepository.findByTelefono(conductor.getTelefono());
+		Conductor dC = conductorRepository.findByTelefono(conductor.getDni());
+
+		if (eC != null && !(eC.getId().equals(conductor.getId()))) {
+			throw new DuplicatedEmailException();
+		} else if (tC != null && !(tC.getId().equals(conductor.getId()))) {
+			throw new DuplicatedTelephoneException();
+		} else if (dC != null && !(dC.getId().equals(conductor.getId()))) {
+			throw new DuplicatedDNIException();
+		} else {
+
+			conductorRepository.save(conductor);
+
+			userService.saveUser(conductor.getUser());
+
 		}
 
 	}

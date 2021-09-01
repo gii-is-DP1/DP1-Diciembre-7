@@ -52,5 +52,25 @@ public class ClienteService {
 		}
 		
 	}
+	@Transactional(rollbackFor = {DuplicatedTelephoneException.class, DuplicatedEmailException.class})
+	public void saveClienteUpdate(Cliente cliente) throws DataAccessException, DuplicatedTelephoneException, DuplicatedEmailException, DuplicatedDNIException{
+		Cliente cE = clienteRepository.findByEmail(cliente.getEmail());
+		Cliente cT = clienteRepository.findByTelefono(cliente.getTelefono());
+		Cliente cD = clienteRepository.findByDNI(cliente.getDni());
+
+		if((cT != null) && !(cT.getId().equals(cliente.getId()))) {
+			throw new DuplicatedTelephoneException();
+		}else if((cE != null) && !(cE.getId().equals(cliente.getId()))){
+			throw new DuplicatedEmailException();
+		}else if((cD != null) && !(cE.getId().equals(cliente.getId()))) {
+			throw new  DuplicatedDNIException();
+		}else {	
+			clienteRepository.save(cliente);
+			
+			userService.saveUser(cliente.getUser());
+			
+		}
+		
+	}
 
 }
