@@ -6,41 +6,42 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags"%>
 
-<petclinic:layout pageName="cliente">
+<petclinic:layout pageName="empresa">
 	<h2>
-		<c:if test="${cliente['new']}">New </c:if>
-		Cliente
+		<c:if test="${empresa['new']}">New </c:if>
+		Empresa
 	</h2>
-	<form:form modelAttribute="cliente" class="form-horizontal"
-		id="add-cliente-form">
+	<form:form modelAttribute="empresa" class="form-horizontal"
+		id="add-empresa-form">
 		<c:choose>
-			<c:when test="${cliente['new']}">
+			<c:when test="${empresa['new']}">
 				<div class="form-group has-feedback">
 					<petclinic:inputField label="Nombre" name="nombre" />
 					<petclinic:inputField label="Telefono" name="telefono" />
 					<petclinic:inputField label="Email" name="email" />
-					<petclinic:inputField label="DNI" name="dni" />
-					<petclinic:inputField label="Direccion" name="direccion" />
+					<petclinic:inputField label="Pais" name="pais" />
 					<petclinic:inputField label="Username" name="user.username" />
 					<petclinic:inputField label="Password" name="user.password" />
 				</div>
 			</c:when>
 			<c:otherwise>
-				<petclinic:inputField label="Nombre" name="nombre" />
-				<petclinic:inputField label="Telefono" name="telefono" />
-				<petclinic:inputField label="Email" name="email" />
-				<petclinic:inputField label="Direccion" name="direccion" />
+				<div class="form-group has-feedback">
+					<petclinic:inputField label="Nombre" name="nombre" />
+					<petclinic:inputField label="Telefono" name="telefono"/>
+					<petclinic:inputField label="Email" name="email" />
+					<petclinic:inputField label="Pais" name="pais" />
+				</div>
 			</c:otherwise>
 		</c:choose>
 		<div class="form-group">
 			<div class="col-sm-offset-2 col-sm-10">
 				<c:choose>
-					<c:when test="${cliente['new']}">
-						<button class="btn btn-default" type="submit">Add Cliente</button>
+					<c:when test="${empresa['new']}">
+						<button class="btn btn-default" type="submit">Add Empresa</button>
 					</c:when>
 					<c:otherwise>
 						<button class="btn btn-default" type="submit">Update
-							Cliente</button>
+							Empresa</button>
 					</c:otherwise>
 				</c:choose>
 			</div>
