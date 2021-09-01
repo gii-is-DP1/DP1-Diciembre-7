@@ -19,5 +19,5 @@ public interface OficinaRepository extends CrudRepository<Oficina, Integer>{
 	
 	@Query("SELECT oficina FROM Oficina oficina WHERE oficina.empresa=:empresa")
 	Collection<Oficina> findOficinaByEmpresa(@Param("empresa") Empresa empresa) throws DataAccessException;
-
+	
 }

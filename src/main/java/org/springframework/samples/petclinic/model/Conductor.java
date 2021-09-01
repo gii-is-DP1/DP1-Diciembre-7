@@ -32,7 +32,6 @@ public class Conductor extends Actor{
 	private String ciudad;
 	
 	@Column(name = "experiencia")
-	@NotBlank
 	@Min(3)
 	private Integer experiencia;
 	
@@ -43,12 +42,10 @@ public class Conductor extends Actor{
 	private Boolean permisoBarco;
 	
 	@Column(name = "salarioBase")
-	@NotBlank
 	@Min(0)
 	private Double salarioBase;
 	
 	@Column(name = "salarioPorDia")
-	@NotBlank
 	@Min(0)
 	private Double salarioPorDia;
 	

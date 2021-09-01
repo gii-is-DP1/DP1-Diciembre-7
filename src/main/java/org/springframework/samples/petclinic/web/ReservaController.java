@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class ReservaController {
@@ -31,7 +32,7 @@ public class ReservaController {
 	private static final String VIEWS_RESERVA_CREATE = "reserva/createReservaForm";
 
 	private final ReservaService reservaService;
-	
+
 	private final ClienteService clienteService;
 
 	private final VehiculoService vehiculoService;
@@ -39,17 +40,14 @@ public class ReservaController {
 	private final ConductorService conductorService;
 
 	@Autowired
-	ReservaController(ReservaService reservaService, VehiculoService vehiculoService,
-			ConductorService conductorService) {
+	ReservaController(ReservaService reservaService, VehiculoService vehiculoService, ConductorService conductorService,
+			ClienteService clienteService) {
 		this.reservaService = reservaService;
 		this.vehiculoService = vehiculoService;
 		this.conductorService = conductorService;
+		this.clienteService = clienteService;
 	}
-	
-	@ModelAttribute("vehiculos")
-	public Collection<Vehiculo> populateVehiculos(){
-		return this.vehiculoService.find;
-	}
+
 	@ModelAttribute("cliente")
 	public Cliente findCliente(@PathVariable("clienteid") int clienteId) {
 		return this.clienteService.findClienteById(clienteId);
@@ -66,35 +64,42 @@ public class ReservaController {
 		model.put("reserva", reserva);
 		return VIEWS_RESERVA_CREATE;
 	}
-	
+
 	@PostMapping(value = "/reserva/new")
-	public String processCreationForm(@Valid Reserva reserva, BindingResult result, ModelMap model) {
-		if(result.hasErrors()) {
+	public String processCreationForm(Cliente cliente, @Valid Reserva reserva, BindingResult result, ModelMap model) {
+		if (result.hasErrors()) {
 			model.put("reserva", reserva);
 			return VIEWS_RESERVA_CREATE;
-		}else{
-			if(reserva.getFechaInicio().isAfter(reserva.getFechaFin())) {
+		} else {
+			if (reserva.getFechaInicio().isAfter(reserva.getFechaFin())) {
 				model.put("reserva", reserva);
-				model.addAttribute("Message","La fecha de fin debe ser mas tarde que la de inicio");
+				model.addAttribute("Message", "La fecha de fin debe ser mas tarde que la de inicio");
 				return VIEWS_RESERVA_CREATE;
-			}else if(reserva.getFechaInicio().isBefore(LocalDate.now())) {
+			} else if (reserva.getFechaInicio().isBefore(LocalDate.now())) {
 				model.put("reserva", reserva);
-				model.addAttribute("Message","La fecha de inicio no puede estar en el pasado");
-			}else{
+				model.addAttribute("Message", "La fecha de inicio no puede estar en el pasado");
+			} else {
 				try {
+					cliente.addReserva(reserva);
 					this.reservaService.saveReserva(reserva);
-				}catch(OverStockedVehicleException ex) {
-					result.rejectValue("","","");
+					model.addAttribute("message","La reserva se ha realizado con exito");
+				} catch (OverStockedVehicleException ex) {
+					result.rejectValue("stock", "", "");
 					model.put("reserva", reserva);
+					model.addAttribute("message","No queda ningun vehiculo de ese modelo y marca");
 					return VIEWS_RESERVA_CREATE;
 				}
-			
-		}
-			
-			model.put("reserva", reserva);
+
+			}
 			return "redirect:/reserva/" + reserva.getId();
 
 		}
+	}
+	@GetMapping("/reserva/{reservaId}")
+	public ModelAndView showReserva(@PathVariable("reservasId") int reservaId) {
+		ModelAndView mav = new ModelAndView("reserva/reservasDetails");
+		mav.addObject(this.reservaService.findReservaById(reservaId));
+		return mav;
 	}
 
 }
