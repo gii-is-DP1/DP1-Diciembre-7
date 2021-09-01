@@ -49,6 +49,11 @@ public class Empresa extends Actor{
 	public void setOficinas(Set<Oficina> oficinas) {
 		this.oficinas = oficinas;
 	}
+	
+	public void addOficina(Oficina oficina) {
+		getOficinas().add(oficina);
+		oficina.setEmpresa(this);
+	}
 
 	public User getUser() {
 		return user;

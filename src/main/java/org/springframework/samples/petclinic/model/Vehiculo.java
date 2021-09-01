@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Min;
@@ -47,9 +48,9 @@ public class Vehiculo extends BaseEntity{
 	@ManyToMany(mappedBy ="vehiculos")
 	private Set<Oficina> oficinas;
 	
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name="reserva_id", referencedColumnName = "id")
-	private Reserva reserva;
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "vehiculo")
+	@JoinColumn(name="reserva_id")
+	private Set<Reserva> reservas;
 
 	public Double getPrecioBase() {
 		return precioBase;
@@ -107,12 +108,12 @@ public class Vehiculo extends BaseEntity{
 		this.oficinas = oficinas;
 	}
 
-	public Reserva getReserva() {
-		return reserva;
+	public Set<Reserva> getReservas() {
+		return reservas;
 	}
 
-	public void setReserva(Reserva reserva) {
-		this.reserva = reserva;
+	public void setReserva(Set<Reserva> reservas) {
+		this.reservas = reservas;
 	}
 
 	
