@@ -32,8 +32,8 @@ public class Reserva extends BaseEntity{
 	@JoinColumn(name = "cliente_id")
 	private Cliente cliente;
 	
-	@OneToOne
-	@JoinColumn(name="vehiculo_id", referencedColumnName = "id")
+	@ManyToOne
+	@JoinColumn(name="vehiculo_id")
 	private Vehiculo vehiculo;
 	
 	@ManyToOne
