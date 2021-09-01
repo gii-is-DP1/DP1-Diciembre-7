@@ -24,6 +24,7 @@
 					<petclinic:inputField label="Experiencia" name="experiencia" />
 					<form:checkbox path="permisoCoche" label="Permiso coche" />
 					<form:checkbox path="permisoBarco" label="Permiso barco" />
+					<petclinic:selectField label="" name="" size="" names=""></petclinic:selectField>
 					<petclinic:inputField label="Salario base" name="salarioBase" />
 					<petclinic:inputField label="Salario por dia" name="salarioPorDia" />
 					<petclinic:inputField label="Username" name="user.username" />
