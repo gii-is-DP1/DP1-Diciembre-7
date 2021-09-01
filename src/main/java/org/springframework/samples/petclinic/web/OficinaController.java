@@ -23,9 +23,11 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
+@RequestMapping("/empresa/{empresaId}")
 public class OficinaController {
 	
 	private static final String VIEWS_OFICINA_CREATE_OR_UPDATE_FORM = "oficina/createOrUpdateOficinaForm";

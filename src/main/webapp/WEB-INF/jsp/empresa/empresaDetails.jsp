@@ -34,4 +34,43 @@
 	<a href="${fn:escapeXml(editUrl)}" class="btn btn-default">Edit
 		Empresa</a>
 
+	<spring:url value="{empresaId}/oficina/new" var="addUrl">
+		<spring:param name="empresaId" value="${empresa.id}" />
+	</spring:url>
+	<a href="${fn:escapeXml(addUrl)}" class="btn btn-default">Add New
+		Oficina</a>
+
+	<br />
+	<br />
+	<br />
+	<h2>Sus Oficinas</h2>
+
+	<table class="table table-striped">
+		<c:forEach var="oficina" items="${empresa.oficinas}">
+			<tr>
+				<td valign="top">
+					<dl class="dl-horizontal">
+						<dt>Ciudad</dt>
+						<dd>
+							<c:out value="${oficina.ciudad}" />
+						</dd>
+						<dt>Dirección</dt>
+						<dd>
+							<petclinic:localDate date="${oficina.direccion}"
+								pattern="yyyy-MM-dd" />
+						</dd>
+						<dt>Código Postal</dt>
+						<dd>
+							<c:out value="${oficina.codigoPostal}" />
+						</dd>
+					</dl>
+				</td>
+				<td><spring:url value="/oficina/{oficinaId}" var="oficinaUrl">
+						<spring:param name="oficinaId" value="${oficina.id}" />
+					</spring:url> <a href="${fn:escapeXml(oficinaUrl)}">Vista Detallada</a></td>
+			<tr>
+		</c:forEach>
+	</table>
+
+
 </petclinic:layout>
