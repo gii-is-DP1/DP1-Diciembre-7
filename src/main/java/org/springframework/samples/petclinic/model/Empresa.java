@@ -54,6 +54,10 @@ public class Empresa extends Actor{
 		getOficinas().add(oficina);
 		oficina.setEmpresa(this);
 	}
+	
+	public Boolean removeOficina(Oficina oficina) {
+		return getOficinas().remove(oficina);
+	}
 
 	public User getUser() {
 		return user;

@@ -2,6 +2,7 @@ package org.springframework.samples.petclinic.web;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -23,9 +24,11 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
+@RequestMapping("/empresa/{empresaId}")
 public class OficinaController {
 	
 	private static final String VIEWS_OFICINA_CREATE_OR_UPDATE_FORM = "oficina/createOrUpdateOficinaForm";
@@ -79,7 +82,7 @@ public class OficinaController {
 				model.addAttribute("message", "Ya existe una oficina con esta direccion");
 				return VIEWS_OFICINA_CREATE_OR_UPDATE_FORM;
 			}
-			return "redirect:/oficina/" + oficina.getId();
+			return "redirect:/empresa/"+ empresa.getId() +"/oficina/" + oficina.getId();
 		}
 	}
 	
@@ -111,6 +114,21 @@ public class OficinaController {
 		mav.addObject(this.oficinaService.findOficinaById(oficinaId));
 		return mav;
 	}
+	
+	@GetMapping("/oficina/{oficinaId}/delete")
+ 	public String deleteOficina(@PathVariable("oficinaId") int oficinaId, @PathVariable("empresaId") int empresaId, ModelMap model) {
+ 		Oficina o = oficinaService.findOficinaById(oficinaId);
+ 		Empresa e = empresaService.findEmpresaById(empresaId);
+ 		if(o != null) {
+ 			e.removeOficina(o);
+ 			oficinaService.deleteOficinaById(oficinaId);
+ 			model.addAttribute("message", "La oficina se ha eliminado correctamente.");
+ 			return "redirect:/empresa/{empresaId}";
+ 		}else {
+ 			model.addAttribute("message", "No se ha encontrado la oficina que quiere eliminar.");
+ 			return "redirect:/empresa/{empresaId}";
+ 		}
+ 	}
 	
 	
 
