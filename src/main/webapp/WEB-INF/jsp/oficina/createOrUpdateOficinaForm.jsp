@@ -20,6 +20,7 @@
 					<c:out value="${oficina.empresa.nombre}" />
 				</div>
 			</div>
+			<input type="hidden" name="id" value="${oficina.id}"/>
 			<petclinic:inputField label="Ciudad" name="ciudad" />
 			<petclinic:inputField label="Dirección" name="direccion" />
 			<petclinic:inputField label="Código Postal" name="codigoPostal" />
