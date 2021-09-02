@@ -63,10 +63,9 @@ public class ClienteController {
 						"El DNI introducido no cumple el patron de un DNI. Son 8 digitos y 1 letra");
 				return VIEWS_CLIENTE_CREATE_OR_UPDATE;
 			}
-			if(!(TelefonoValidator.validarTelefono(cliente.getTelefono()))) {
+			if (!(TelefonoValidator.validarTelefono(cliente.getTelefono()))) {
 				model.put("cliente", cliente);
-				model.addAttribute("message",
-						"El telefono debe tener 9 numeros");
+				model.addAttribute("message", "El telefono debe tener 9 numeros");
 				return VIEWS_CLIENTE_CREATE_OR_UPDATE;
 			}
 			try {
@@ -107,8 +106,8 @@ public class ClienteController {
 			model.put("cliente", cliente);
 			return VIEWS_CLIENTE_CREATE_OR_UPDATE;
 		} else {
-			Cliente clienteToUpdate=this.clienteService.findClienteById(clienteId);
-			BeanUtils.copyProperties(cliente, clienteToUpdate, "id", "reservas","user");
+			Cliente clienteToUpdate = this.clienteService.findClienteById(clienteId);
+			BeanUtils.copyProperties(cliente, clienteToUpdate, "id", "reservas", "user");
 			cliente.setId(clienteId);
 			if (!(DNIValidator.validarDNI(clienteToUpdate.getDni()))) {
 				model.put("cliente", cliente);
@@ -116,10 +115,9 @@ public class ClienteController {
 						"El DNI introducido no cumple el patron de un DNI. Son 8 digitos y 1 letra");
 				return VIEWS_CLIENTE_CREATE_OR_UPDATE;
 			}
-			if(!(TelefonoValidator.validarTelefono(clienteToUpdate.getTelefono()))) {
+			if (!(TelefonoValidator.validarTelefono(clienteToUpdate.getTelefono()))) {
 				model.put("cliente", cliente);
-				model.addAttribute("message",
-						"El telefono debe tener 9 numeros");
+				model.addAttribute("message", "El telefono debe tener 9 numeros");
 				return VIEWS_CLIENTE_CREATE_OR_UPDATE;
 			}
 			try {
