@@ -67,7 +67,7 @@ public class EmpresaController {
 				model.put("empresa", empresa);
 				model.addAttribute("message", "Ya existe una empresa con este email");
 			}
-			return "redirect:/empresa/" + empresa.getId();
+			return "/welcome";
 		}
 	}
 
