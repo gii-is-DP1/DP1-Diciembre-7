@@ -16,45 +16,50 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class OficinaService {
-	
+
 	private OficinaRepository oficinaRepository;
 	private EmpresaRepository empresaRepository;
-	
+
 	@Autowired
 	public OficinaService(OficinaRepository oficinaRepository, EmpresaRepository empresaRepository) {
 		this.oficinaRepository = oficinaRepository;
 		this.empresaRepository = empresaRepository;
 	}
-	
+
 	@Transactional(readOnly = true)
 	public Oficina findOficinaById(int id) throws DataAccessException {
 		return oficinaRepository.findById(id);
 	}
-	
+
 	@Transactional(rollbackFor = DuplicatedOfficeAddressException.class)
-	public void saveOficina(Oficina oficina) throws DataAccessException, DuplicatedOfficeAddressException{
-		Set<Oficina> oficinas =  oficina.getEmpresa().getOficinas();
-		for(Oficina o : oficinas) {
-			if((o.getCiudad().equals(oficina.getCiudad())) &&
-			   (o.getCodigoPostal().equals(oficina.getCodigoPostal())) &&
-			   (o.getDireccion().equals(oficina.getDireccion()))){
-				throw new DuplicatedOfficeAddressException();
+	public void saveOficina(Oficina oficina) throws DataAccessException, DuplicatedOfficeAddressException {
+		Set<Oficina> oficinas = oficina.getEmpresa().getOficinas();
+		if (!oficinas.isEmpty()) {
+			for (Oficina o : oficinas) {
+				if ((o.getId() != null) && !(o.getId().equals(oficina.getId())) && (o.getCiudad().equals(oficina.getCiudad()))
+						&& (o.getCodigoPostal().equals(oficina.getCodigoPostal()))
+						&& (o.getDireccion().equals(oficina.getDireccion()))) {
+					throw new DuplicatedOfficeAddressException();
+				}
 			}
 		}
 		oficinaRepository.save(oficina);
 	}
-	
+
 	@Transactional(readOnly = true)
-	public Collection<Oficina> findOficinaByCiudad(String ciudad) throws DataAccessException{
+	public Collection<Oficina> findOficinaByCiudad(String ciudad) throws DataAccessException {
 		return oficinaRepository.findOficinaByCiudad(ciudad);
 	}
-	
+
 	@Transactional(readOnly = true)
-	public Collection<Oficina> findOficinaByEmpresa(int id) throws DataAccessException{
+	public Collection<Oficina> findOficinaByEmpresa(int id) throws DataAccessException {
 		Empresa em = empresaRepository.findById(id);
 		return oficinaRepository.findOficinaByEmpresa(em);
 	}
 	
-	
+	@Transactional()
+	public void deleteOficinaById(int id) throws DataAccessException{
+		oficinaRepository.deleteById(id);
+	}
 
 }
