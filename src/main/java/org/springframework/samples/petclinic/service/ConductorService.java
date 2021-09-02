@@ -125,5 +125,9 @@ public class ConductorService {
 		}
 
 	}
+	@Transactional(readOnly=true)
+	public Collection<Conductor> findAllConductores() {
+		return conductorRepository.findAll();
+	}
 
 }

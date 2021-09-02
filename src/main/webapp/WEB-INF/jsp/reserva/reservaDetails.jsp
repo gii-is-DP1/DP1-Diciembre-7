@@ -20,14 +20,14 @@
 		</tr>
 		<tr>
 			<th>Precio Total</th>
-			<td><c:out value="${cliente.telefono}" /></td>
+			<td><c:out value="${reserva.precioFinal}" /></td>
 		</tr>
 	</table>
 
 	<spring:url value="/cliente/{clienteId}/reserva/{reservaId}/delete"
 		var="deleteUrl">
 		<spring:param name="reservaId" value="${reserva.id}" />
-		<spring:param name="clienteId" value="${reserva.cliente.id}" />
+		<spring:param name="clienteId" value="${cliente.id}" />
 	</spring:url>
 	<a href="${fn:escapeXml(deleteUrl)}" class="btn btn-default">Cancelar
 		Reserva</a>
@@ -40,27 +40,25 @@
 	<table class="table table-striped">
 		<tr>
 			<th>Marca</th>
-			<td><b><c:out value="${vehiculo.marca}" /></b></td>
+			<td><b><c:out value="${reserva.vehiculo.marca}" /></b></td>
 		</tr>
 		<tr>
 			<th>Modelo</th>
-			<td><c:out value="${vehiculo.modelo}" /></td>
+			<td><c:out value="${reserva.vehiculo.modelo}" /></td>
 		</tr>
 		<tr>
 			<th>Precio base</th>
-			<td><c:out value="${vehiculo.precioBase}" /></td>
+			<td><c:out value="${reserva.vehiculo.precioBase}" /></td>
 		</tr>
 		<tr>
 			<th>Precio por dia</th>
-			<td><c:out value="${vehiculo.precioPorDia}" /></td>
+			<td><c:out value="${reserva.vehiculo.precioPorDia}" /></td>
 
 			<td><spring:url value="/vehiculo/{vehiculoId}" var="vehiculoUrl">
-					<spring:param name="vehiculoId" value="${vehiculo.id}" />
+					<spring:param name="vehiculoId" value="${reserva.vehiculo.id}" />
 				</spring:url> <a href="${fn:escapeXml(vehiculoUrl)}">Vista Detallada</a></td>
 		</tr>
 	</table>
-<c:catch var="sinConductor">${conductor.id}</c:catch>
-<c:if test="${not empty SinConductor}">
 	<br />
 	<br />
 	<br />
@@ -68,25 +66,23 @@
 	<table class="table table-striped">
 		<tr>
 			<th>Nombre</th>
-			<td><b><c:out value="${conductor.nombre}" /></b></td>
+			<td><b><c:out value="${reserva.conductor.nombre}" /></b></td>
 		</tr>
 		<tr>
 			<th>Experiencia</th>
-			<td><c:out value="${conductor.experiencia}" /></td>
+			<td><c:out value="${reserva.conductor.experiencia}" /></td>
 		</tr>
 		<tr>
 			<th>Salario base</th>
-			<td><c:out value="${conductor.salarioBase}" /></td>
+			<td><c:out value="${reserva.conductor.salarioBase}" /></td>
 		</tr>
 		<tr>
 			<th>Salario por dia</th>
-			<td><c:out value="${conductor.salarioPorDia}" /></td>
+			<td><c:out value="${reserva.conductor.salarioPorDia}" /></td>
 
 			<td><spring:url value="/conductor/{conductorId}" var="conductorUrl">
-					<spring:param name="conductorId" value="${conductor.id}" />
+					<spring:param name="conductorId" value="${reserva.conductor.id}" />
 				</spring:url> <a href="${fn:escapeXml(conductorUrl)}">Vista Detallada</a></td>
 		</tr>
 	</table>
-	
- </c:if>
 </petclinic:layout>

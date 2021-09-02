@@ -11,22 +11,32 @@ import javax.persistence.Table;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 @Entity
 @Table(name="reservas")
 public class Reserva extends BaseEntity{
 	
 	@Column(name="fechaInicio")
-	@NotBlank
+	@DateTimeFormat(pattern = "yyyy/MM/dd")
 	private LocalDate fechaInicio;
 	
 	@Column(name="fechaFin")
-	@NotBlank
+	@DateTimeFormat(pattern = "yyyy/MM/dd")
 	private LocalDate fechaFin;
 	
 	@Column(name="precioFinal")
-	@NotBlank
 	@Min(0)
 	private Double precioFinal;
+	
+	@Column(name="ciudad")
+	@NotBlank
+	private String ciudad;
 	
 	@ManyToOne
 	@JoinColumn(name = "cliente_id")
@@ -86,6 +96,14 @@ public class Reserva extends BaseEntity{
 
 	public void setConductor(Conductor conductor) {
 		this.conductor = conductor;
+	}
+
+	public String getCiudad() {
+		return ciudad;
+	}
+
+	public void setCiudad(String ciudad) {
+		this.ciudad = ciudad;
 	}
 	
 	
