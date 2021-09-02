@@ -3,6 +3,7 @@ package org.springframework.samples.petclinic.web;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.validation.Valid;
 
@@ -11,6 +12,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Empresa;
 import org.springframework.samples.petclinic.model.Oficina;
 import org.springframework.samples.petclinic.model.Owner;
+import org.springframework.samples.petclinic.model.Vehiculo;
 import org.springframework.samples.petclinic.repository.OficinaRepository;
 import org.springframework.samples.petclinic.service.EmpresaService;
 import org.springframework.samples.petclinic.service.OficinaService;
@@ -31,7 +33,7 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/empresa/{empresaId}")
 public class OficinaController {
 	
-	private static final String VIEWS_OFICINA_CREATE_OR_UPDATE_FORM = "oficina/createOrUpdateOficinaForm";
+	private static final String VIEWS_OFICINA_CREATE_FORM = "oficina/createOficinaForm";
 	
 	private final OficinaService oficinaService;
 	private final EmpresaService empresaService;
@@ -62,7 +64,7 @@ public class OficinaController {
 		Oficina oficina = new Oficina();
 		empresa.addOficina(oficina);
 		model.put("oficina", oficina);
-		return VIEWS_OFICINA_CREATE_OR_UPDATE_FORM;
+		return VIEWS_OFICINA_CREATE_FORM;
 	}
 	
 	@PostMapping(value = "/oficina/new")
@@ -70,7 +72,7 @@ public class OficinaController {
 			throws DataAccessException, DuplicatedOfficeAddressException{
 		if(result.hasErrors()) {
 			model.put("oficina", oficina);
-			return VIEWS_OFICINA_CREATE_OR_UPDATE_FORM;
+			return VIEWS_OFICINA_CREATE_FORM;
 		}else {
 			try {
 				empresa.addOficina(oficina);
@@ -80,7 +82,7 @@ public class OficinaController {
 				result.rejectValue("direccion", "duplicated", "already exists");
 				model.put("oficina", oficina);
 				model.addAttribute("message", "Ya existe una oficina con esta direccion");
-				return VIEWS_OFICINA_CREATE_OR_UPDATE_FORM;
+				return VIEWS_OFICINA_CREATE_FORM;
 			}
 			return "redirect:/empresa/"+ empresa.getId() +"/oficina/" + oficina.getId();
 		}
@@ -120,6 +122,13 @@ public class OficinaController {
  		Oficina o = oficinaService.findOficinaById(oficinaId);
  		Empresa e = empresaService.findEmpresaById(empresaId);
  		if(o != null) {
+ 			Set<Vehiculo> vehiculos = o.getVehiculos();
+ 			if(!(vehiculos.isEmpty()) || vehiculos!=null){
+ 			for(Vehiculo v:vehiculos) {
+ 				v.removeOficina(o);
+ 			}
+ 			}
+ 			o.getVehiculos().removeAll(vehiculos);
  			e.removeOficina(o);
  			oficinaService.deleteOficinaById(oficinaId);
  			model.addAttribute("message", "La oficina se ha eliminado correctamente.");

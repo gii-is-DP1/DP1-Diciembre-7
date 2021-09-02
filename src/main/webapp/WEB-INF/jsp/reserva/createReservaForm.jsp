@@ -8,11 +8,11 @@
 
 <petclinic:layout pageName="oficina">
 	<h2>
-		<c:if test="${oficina['new']}">Nueva </c:if>
-		Oficina
+		<c:if test="${reserva['new']}">Nueva </c:if>
+		Reserva
 	</h2>
 	<form:form modelAttribute="oficina" class="form-horizontal"
-		id="add-oficina-form">
+		id="add-reserva-form">
 		<div class="form-group has-feedback">
 			<div class="form-group">
 				<label class="col-sm-2 control-label">Empresa</label>

@@ -23,7 +23,7 @@ class ValidatorTests {
 		localValidatorFactoryBean.afterPropertiesSet();
 		return localValidatorFactoryBean;
 	}
-
+/*
 	@Test
 	void shouldNotValidateWhenFirstNameEmpty() {
 
@@ -39,6 +39,23 @@ class ValidatorTests {
 		ConstraintViolation<Person> violation = constraintViolations.iterator().next();
 		assertThat(violation.getPropertyPath().toString()).isEqualTo("firstName");
 		assertThat(violation.getMessage()).isEqualTo("must not be empty");
+	}
+*/	
+	@Test
+	void shouldNotValidateWhenNameEmpty() {
+		LocaleContextHolder.setLocale(Locale.ENGLISH);
+		Actor actor = new Actor();
+		actor.setNombre("");
+		actor.setEmail("aa@aa.com");
+		actor.setTelefono("123456789");
+		
+		Validator validator = createValidator();
+		Set<ConstraintViolation<Actor>> constraintViolations = validator.validate(actor);
+		
+		assertThat(constraintViolations.size()).isEqualTo(1);
+		ConstraintViolation<Actor> violation = constraintViolations.iterator().next();
+		assertThat(violation.getPropertyPath().toString()).isEqualTo("nombre");
+		assertThat(violation.getMessage()).isEqualTo("must not be blank");
 	}
 
 }
