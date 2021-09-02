@@ -123,8 +123,8 @@ public class VehiculoController {
 				result.rejectValue("model", "duplicate", "already exists");
 				return VIEWS_VEHICULO_CREATE_OR_UPDATE_FORM;
 			}
-			return "redirect:/empresa/" + oficina.getEmpresa().getId() + "/oficina/" + oficina.getId() + "/vehiculo/"
-					+ vehiculo.getId();
+			return "redirect:/empresa/" + oficina.getEmpresa().getId() + "/oficina/" + oficina.getId() + "/vehiculo/" + vehiculoToUpdate.getId();
+
 		}
 	}
 

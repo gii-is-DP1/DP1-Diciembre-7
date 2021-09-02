@@ -88,7 +88,7 @@ public class VehiculoService {
 		for (Oficina o : oficinas) {
 			Set<Vehiculo> vehiculos = o.getVehiculos();
 			for (Vehiculo v : vehiculos) {
-				if (v.getMarca().equals(vehiculo.getMarca()) && v.getModelo().equals(vehiculo.getModelo())) {
+				if (v.getMarca().equals(vehiculo.getMarca()) && v.getModelo().equals(vehiculo.getModelo()) && vehiculo.getId()!=v.getId()) {
 					throw new DuplicatedVehicleModelException();
 				}
 			}
