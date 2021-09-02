@@ -16,6 +16,7 @@ import org.springframework.samples.petclinic.repository.VehiculoRepository;
 import org.springframework.samples.petclinic.repository.OficinaRepository;
 import org.springframework.samples.petclinic.repository.ReservaRepository;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedVehicleModelException;
+import org.springframework.samples.petclinic.service.exceptions.VehiculoReservadoException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,13 +51,14 @@ public class VehiculoService {
 	public Collection<Vehiculo> findVehiculosPorCiudadYFechaDisponibles(String ciudad, LocalDate fechaInicio,
 			LocalDate fechaFin) throws DataAccessException {
 		Collection<Collection<Vehiculo>> vehiculosCiudad = vehiculoRepository.findVehiculosPorCiudad(ciudad);
+		Collection<Vehiculo> vehiculosCiudadYFechaDisponibles = new ArrayList<>();
 		Set<Vehiculo> vehiculosCiudadAplanado = new HashSet<>();
+		if(vehiculosCiudad != null) {
 		for(Collection<Vehiculo> vehiculos:vehiculosCiudad) {
 			for(Vehiculo v: vehiculos) {
 				vehiculosCiudadAplanado.add(v);
 			}
 		}
-		Collection<Vehiculo> vehiculosCiudadYFechaDisponibles = new ArrayList<>();
 		for (Vehiculo v : vehiculosCiudadAplanado) {
 			Integer stock = v.getStock();
 			Integer acum = 0;
@@ -75,13 +77,14 @@ public class VehiculoService {
 				vehiculosCiudadYFechaDisponibles.add(v);
 			}
 		}
-
+		}
 		return vehiculosCiudadYFechaDisponibles;
 	}
 
 	@Transactional(rollbackFor = DuplicatedVehicleModelException.class)
 	public void saveVehiculo(Vehiculo vehiculo) throws DataAccessException, DuplicatedVehicleModelException {
 		Set<Oficina> oficinas = vehiculo.getOficinas();
+		if(oficinas !=null) {
 		for (Oficina o : oficinas) {
 			Set<Vehiculo> vehiculos = o.getVehiculos();
 			for (Vehiculo v : vehiculos) {
@@ -90,7 +93,22 @@ public class VehiculoService {
 				}
 			}
 		}
+		}
 		vehiculoRepository.save(vehiculo);
+	}
+	@Transactional()	
+	public void deleteVehiculoById(int vehiculoId) throws VehiculoReservadoException {
+		LocalDate now = LocalDate.now();
+		Vehiculo v = vehiculoRepository.findById(vehiculoId);
+		Collection<Reserva> reservas = reservaRepository.findReservasByVehiculo(v);
+		if(reservas!=null || reservas.isEmpty()) {
+			for(Reserva r:reservas) {
+				if(r.getFechaInicio().equals(now) || r.getFechaInicio().isAfter(now) || r.getFechaFin().equals(now) || r.getFechaFin().isAfter(now)) {
+					throw new VehiculoReservadoException();
+				}
+			}
+		}
+		vehiculoRepository.deleteById(vehiculoId);
 	}
 
 }

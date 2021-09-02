@@ -27,6 +27,10 @@
 			<td><c:out value="${conductor.dni}" /></td>
 		</tr>
 		<tr>
+			<th>Experiencia</th>
+			<td><c:out value="${conductor.experiencia}" /></td>
+		</tr>
+		<tr>
 			<th>Permiso de coche</th>
 			<td><c:out value="${conductor.permisoCoche}" /></td>
 		</tr>

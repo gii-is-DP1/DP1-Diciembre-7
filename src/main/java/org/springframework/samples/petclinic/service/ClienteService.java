@@ -15,11 +15,13 @@ public class ClienteService {
 	
 	private ClienteRepository clienteRepository;
 	
+	
 	@Autowired
 	private UserService userService;
 	
 	@Autowired
 	private AuthoritiesService authoritiesService;
+	
 	
 	@Autowired
 	public ClienteService(ClienteRepository clienteRepository) {
@@ -72,5 +74,5 @@ public class ClienteService {
 		}
 		
 	}
-
+	
 }
