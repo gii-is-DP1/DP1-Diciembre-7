@@ -27,8 +27,8 @@
 					<span class="glyphicon glyphicon-home" aria-hidden="true"></span>
 					<span>Home</span>
 				</petclinic:menuItem>
-
-				<petclinic:menuItem active="${name eq 'owners'}" url="/owners/find"
+				
+				<!--<petclinic:menuItem active="${name eq 'Crear Reserva'}" url="/"
 					title="find owners">
 					<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
 					<span>Find owners</span>
@@ -44,7 +44,7 @@
 					title="trigger a RuntimeException to see how it is handled">
 					<span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
 					<span>Error</span>
-				</petclinic:menuItem>
+				</petclinic:menuItem>-->
 
 			</ul>
 
@@ -54,7 +54,33 @@
 			<ul class="nav navbar-nav navbar-right">
 				<sec:authorize access="!isAuthenticated()">
 					<li><a href="<c:url value="/login" />">Login</a></li>
-					<li><a href="<c:url value="/users/new" />">Register</a></li>
+					<li class="dropdown"><a href="#" class="dropdown-toggle"
+						data-toggle="dropdown"> <span class="glyphicon glyphicon-user"></span> 
+							<strong>Anónimo</strong> <span
+							class="glyphicon glyphicon-chevron-down"></span>
+					</a>
+					<ul class="dropdown-menu">
+							<li>
+								<div class="navbar-login">
+									<div class="row">
+										<div class="col-lg-12">
+											<p class="text-left">
+												<a href="<c:url value="/cliente/new" />"
+													class="btn btn-primary btn-block btn-sm">Registrar cliente</a>
+											</p>
+											<p class="text-left">
+												<a href="<c:url value="/conductor/new" />"
+													class="btn btn-primary btn-block btn-sm">Registrar conductor</a>
+											</p>
+											<p class="text-left">
+												<a href="<c:url value="/empresa/new" />"
+													class="btn btn-primary btn-block btn-sm">Registrar empresa</a>
+											</p>
+										</div>
+									</div>
+								</div>
+							</li>
+						</ul>
 				</sec:authorize>
 				<sec:authorize access="isAuthenticated()">
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
@@ -71,7 +97,7 @@
 												<span class="glyphicon glyphicon-user icon-size"></span>
 											</p>
 										</div>
-										<div class="col-lg-8">
+										<div class="col-lg-12">
 											<p class="text-left">
 												<strong><sec:authentication property="name" /></strong>
 											</p>
@@ -84,21 +110,21 @@
 								</div>
 							</li>
 							<li class="divider"></li>
-<!-- 							
-                            <li> 
-								<div class="navbar-login navbar-login-session">
-									<div class="row">
-										<div class="col-lg-12">
-											<p>
-												<a href="#" class="btn btn-primary btn-block">My Profile</a>
-												<a href="#" class="btn btn-danger btn-block">Change
-													Password</a>
-											</p>
-										</div>
-									</div>
-								</div>
-							</li>
--->
+					
+<!--                             <li>  -->
+<!-- 								<div class="navbar-login navbar-login-session"> -->
+<!-- 									<div class="row"> -->
+<!-- 										<div class="col-lg-12"> -->
+<!-- 											<p> -->
+<!-- 												<a href="#" class="btn btn-primary btn-block">My Profile</a> -->
+<!-- 												<a href="#" class="btn btn-danger btn-block">Change -->
+<!-- 													Password</a> -->
+<!-- 											</p> -->
+<!-- 										</div> -->
+<!-- 									</div> -->
+<!-- 								</div> -->
+<!-- 							</li> -->
+
 						</ul></li>
 				</sec:authorize>
 			</ul>

@@ -91,7 +91,7 @@ public class ConductorController {
 				return VIEWS_CONDUCTOR_CREATE_OR_UPDATE;
 			}
 			model.put("conductor", conductor);
-			return "redirect:/conductor/" + conductor.getId();
+			return "/welcome";
 		}
 	}
 
