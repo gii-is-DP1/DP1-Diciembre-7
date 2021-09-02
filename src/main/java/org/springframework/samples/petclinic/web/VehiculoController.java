@@ -139,6 +139,7 @@ public class VehiculoController {
 	public String deleteVehiculo(@PathVariable("vehiculoId") int vehiculoId, @PathVariable("oficinaId") int oficinaId,
 			ModelMap model) throws VehiculoReservadoException {
 		Vehiculo v = vehiculoService.findVehiculoById(vehiculoId);
+		Oficina ofi = oficinaService.findOficinaById(oficinaId);
 		if (v != null) {
 			try {			
 				Set<Oficina> oficinas = v.getOficinas();
@@ -150,14 +151,14 @@ public class VehiculoController {
 				v.getOficinas().removeAll(oficinas);
 				vehiculoService.deleteVehiculoById(vehiculoId);
 				model.addAttribute("message", "El vehiculo se ha eliminado correctamente.");
-				return "redirect:/oficina/{oficinaId}";
+				return "redirect:/empresa/" +ofi.getEmpresa().getId()+ "/oficina/{oficinaId}";
 			} catch (VehiculoReservadoException ex) {
 				model.addAttribute("message", "El vehiculo aun esta reservado");
-				return "redirect:/oficina/{oficinaId}";
+				return "redirect:/empresa/" +ofi.getEmpresa().getId()+ "/oficina/{oficinaId}";
 			}
 		} else {
 			model.addAttribute("message", "No se ha encontrado el vehiculo que quiere eliminar.");
-			return "redirect:/empresa/{empresaId}/oficina/{oficinaId}";
+			return "redirect:/empresa/" +ofi.getEmpresa().getId()+ "/oficina/{oficinaId}";
 		}
 	}
 

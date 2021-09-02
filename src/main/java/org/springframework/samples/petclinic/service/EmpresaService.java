@@ -56,7 +56,7 @@ public class EmpresaService {
 		Empresa eT = empresaRepository.findByTelefono(empresa.getTelefono());
 		if (eT != null && !(eT.getId().equals(empresa.getId()))) {
 			throw new DuplicatedTelephoneException();
-		} else if (eE != null && (eE.getId().equals(empresa.getId()))) {
+		} else if (eE != null && !(eE.getId().equals(empresa.getId()))) {
 			throw new DuplicatedEmailException();
 		} else {
 			empresaRepository.save(empresa);
