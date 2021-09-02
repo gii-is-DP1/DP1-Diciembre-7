@@ -34,7 +34,8 @@
 	<a href="${fn:escapeXml(addUrl)}" class="btn btn-default">Add New
 		Vehiculo</a>
 
-	<spring:url value="/empresa/{empresaId}/oficina/{oficinaId}/delete" var="deleteUrl">
+	<spring:url value="/empresa/{empresaId}/oficina/{oficinaId}/delete"
+		var="deleteUrl">
 		<spring:param name="oficinaId" value="${oficina.id}" />
 		<spring:param name="empresaId" value="${oficina.empresa.id}" />
 	</spring:url>
@@ -73,7 +74,8 @@
 						</dd>
 					</dl>
 				</td>
-				<td><spring:url value="/empresa/{empresaId}/oficina/{oficinaId}/vehiculo/{vehiculoId}"
+				<td><spring:url
+						value="/empresa/{empresaId}/oficina/{oficinaId}/vehiculo/{vehiculoId}"
 						var="vehiculoUrl">
 						<spring:param name="vehiculoId" value="${vehiculo.id}" />
 						<spring:param name="empresaId" value="${oficina.empresa.id}" />

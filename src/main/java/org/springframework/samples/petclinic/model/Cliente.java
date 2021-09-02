@@ -105,6 +105,9 @@ public class Cliente extends Actor {
 		getReservasInternal().add(reserva);
 		reserva.setCliente(this);
 	}
+	public boolean removeReserva(Reserva reserva) {
+		return getReservasInternal().remove(reserva);
+	}
 	
 	public User getUser() {
 		return user;

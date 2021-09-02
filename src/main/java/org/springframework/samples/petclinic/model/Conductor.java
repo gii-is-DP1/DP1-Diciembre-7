@@ -1,5 +1,9 @@
 package org.springframework.samples.petclinic.model;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -12,6 +16,8 @@ import javax.persistence.Table;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 
+import org.springframework.beans.support.MutableSortDefinition;
+import org.springframework.beans.support.PropertyComparator;
 import org.springframework.core.style.ToStringCreator;
 
 import lombok.Getter;
@@ -112,10 +118,28 @@ public class Conductor extends Actor{
 		this.salarioPorDia = salarioPorDia;
 	}
 	
-	public Set<Reserva> getReservas() {
-		return reservas;
+	
+	protected Set<Reserva> getReservasInternal() {
+		if(this.reservas == null) {
+			this.reservas = new HashSet<>();		
+			}
+		return this.reservas;
 	}
-
+	
+	public List<Reserva> getReservas(){
+		List<Reserva> sortedReservas = new ArrayList<>(getReservasInternal());
+		PropertyComparator.sort(sortedReservas, new MutableSortDefinition("fechaInicial", false, false));
+		return Collections.unmodifiableList(sortedReservas);
+	}
+	
+	public void addReserva(Reserva reserva) {
+		getReservasInternal().add(reserva);
+		reserva.setConductor(this);
+	}
+	public boolean removeReserva(Reserva reserva) {
+		return getReservasInternal().remove(reserva);
+	}
+	
 	public void setReservas(Set<Reserva> reservas) {
 		this.reservas = reservas;
 	}

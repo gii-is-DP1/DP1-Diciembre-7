@@ -1,5 +1,6 @@
 package org.springframework.samples.petclinic.model;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -61,9 +62,16 @@ public class Oficina extends BaseEntity{
 	public void setCodigoPostal(Integer codigoPostal) {
 		this.codigoPostal = codigoPostal;
 	}
+	
+	protected Set<Vehiculo> getVehiculosInternal(){
+		if(this.vehiculos == null) {
+			this.vehiculos = new HashSet<>();
+		}
+		return this.vehiculos;
+	}
 
 	public Set<Vehiculo> getVehiculos() {
-		return vehiculos;
+		return getVehiculosInternal();
 	}
 
 	public void setVehiculos(Set<Vehiculo> vehiculos) {
@@ -81,6 +89,10 @@ public class Oficina extends BaseEntity{
 
 	public void setEmpresa(Empresa empresa) {
 		this.empresa = empresa;
+	}
+
+	public boolean removeVehiculo(Vehiculo v) {
+		return getVehiculos().remove(v);
 	}
 	
 	

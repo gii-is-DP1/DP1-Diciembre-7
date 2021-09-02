@@ -138,9 +138,7 @@ public class ClienteController {
 				model.put("cliente", cliente);
 				model.addAttribute("message", "Ya existe un cliente con este DNI");
 			}
-
 			return "redirect:/cliente/{clienteId}";
-
 		}
 
 	}
