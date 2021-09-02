@@ -36,7 +36,7 @@ public class OficinaService {
 		Set<Oficina> oficinas = oficina.getEmpresa().getOficinas();
 		if (!oficinas.isEmpty()) {
 			for (Oficina o : oficinas) {
-				if (!(o.getId().equals(oficina.getId())) && (o.getCiudad().equals(oficina.getCiudad()))
+				if ((o.getId() != null) && !(o.getId().equals(oficina.getId())) && (o.getCiudad().equals(oficina.getCiudad()))
 						&& (o.getCodigoPostal().equals(oficina.getCodigoPostal()))
 						&& (o.getDireccion().equals(oficina.getDireccion()))) {
 					throw new DuplicatedOfficeAddressException();
@@ -55,6 +55,11 @@ public class OficinaService {
 	public Collection<Oficina> findOficinaByEmpresa(int id) throws DataAccessException {
 		Empresa em = empresaRepository.findById(id);
 		return oficinaRepository.findOficinaByEmpresa(em);
+	}
+	
+	@Transactional()
+	public void deleteOficinaById(int id) throws DataAccessException{
+		oficinaRepository.deleteById(id);
 	}
 
 }

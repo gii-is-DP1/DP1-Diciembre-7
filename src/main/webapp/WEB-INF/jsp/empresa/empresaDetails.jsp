@@ -56,8 +56,7 @@
 						</dd>
 						<dt>Dirección</dt>
 						<dd>
-							<petclinic:localDate date="${oficina.direccion}"
-								pattern="yyyy-MM-dd" />
+							<c:out value="${oficina.direccion}" />
 						</dd>
 						<dt>Código Postal</dt>
 						<dd>
