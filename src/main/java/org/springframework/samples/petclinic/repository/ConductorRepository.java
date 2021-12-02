@@ -27,6 +27,6 @@ public interface ConductorRepository extends Repository<Conductor,String>{
 	@Query("SELECT conductor FROM Conductor conductor WHERE conductor.dni =:dni")
 	public Conductor findByDNI(@Param("dni") String dni);
 	
-	@Query("SELECT conductor FROM Conductor conductor")
-	public Collection<Conductor> findAllConductor();
+	@Query("SELECT conductor From Conductor conductor")
+	public Collection<Conductor> findAll();
 }

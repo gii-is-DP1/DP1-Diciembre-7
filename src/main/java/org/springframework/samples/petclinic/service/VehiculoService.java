@@ -1,7 +1,6 @@
 package org.springframework.samples.petclinic.service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -51,7 +50,7 @@ public class VehiculoService {
 	public Collection<Vehiculo> findVehiculosPorCiudadYFechaDisponibles(String ciudad, LocalDate fechaInicio,
 			LocalDate fechaFin) throws DataAccessException {
 		Collection<Collection<Vehiculo>> vehiculosCiudad = vehiculoRepository.findVehiculosPorCiudad(ciudad);
-		Collection<Vehiculo> vehiculosCiudadYFechaDisponibles = new ArrayList<>();
+		Collection<Vehiculo> vehiculosCiudadYFechaDisponibles = new HashSet<>();
 		Set<Vehiculo> vehiculosCiudadAplanado = new HashSet<>();
 		if(vehiculosCiudad != null) {
 		for(Collection<Vehiculo> vehiculos:vehiculosCiudad) {
@@ -109,6 +108,10 @@ public class VehiculoService {
 			}
 		}
 		vehiculoRepository.deleteById(vehiculoId);
+	}
+	@Transactional(readOnly = true)
+	public Collection<Vehiculo> findAllVehiculos() {
+		return vehiculoRepository.findAll();
 	}
 
 }
