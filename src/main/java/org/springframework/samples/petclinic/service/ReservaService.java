@@ -50,6 +50,8 @@ public class ReservaService {
 	@Transactional(rollbackFor = OverStockedVehicleException.class)
 	public void saveReserva(Reserva reserva) throws DataAccessException, OverStockedVehicleException {
 		Vehiculo vehiculo = reserva.getVehiculo();
+		Integer diasReserva = reserva.getFechaFin().getDayOfYear()-reserva.getFechaInicio().getDayOfYear();
+		Double precioTotal = vehiculo.getPrecioBase() + (vehiculo.getPrecioPorDia()*diasReserva);
 		Collection<Reserva> reservasVehiculo = findReservasByVehiculo(vehiculo);
 		Set<Reserva> reservasVehiculoActuales = new HashSet<Reserva>();
 		for (Reserva r : reservasVehiculo) {
@@ -67,6 +69,7 @@ public class ReservaService {
 		if ((reservasVehiculoActuales.size() + 1) > vehiculo.getStock()) {
 			throw new OverStockedVehicleException();
 		} else {
+			reserva.setPrecioFinal(precioTotal);
 			reservaRepository.save(reserva);
 		}
 	}

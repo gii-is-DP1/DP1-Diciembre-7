@@ -2,12 +2,14 @@ package org.springframework.samples.petclinic.web;
 
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Cliente;
 import org.springframework.samples.petclinic.model.Conductor;
@@ -31,9 +33,11 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
+@RequestMapping("/cliente/{clienteId}")
 public class ReservaController {
 
 	private static final String VIEWS_RESERVA_CREATE = "reserva/createReservaForm";
@@ -45,6 +49,8 @@ public class ReservaController {
 	private final VehiculoService vehiculoService;
 
 	private final ConductorService conductorService;
+	
+	private Environment environment;
 
 	@Autowired
 	ReservaController(ReservaService reservaService, VehiculoService vehiculoService, ConductorService conductorService,
@@ -54,10 +60,24 @@ public class ReservaController {
 		this.clienteService = clienteService;
 		this.conductorService = conductorService;
 	}
+	@ModelAttribute("tipoVehiculo")
+	public Collection<TipoVehiculo> populateTipoVehiculo() {
+		return this.vehiculoService.findTipoVehiculo();
+	}
 
 	@ModelAttribute("cliente")
-	public Cliente findCliente(@PathVariable("clienteid") int clienteId) {
+	public Cliente findCliente(@PathVariable("clienteId") int clienteId) {
 		return this.clienteService.findClienteById(clienteId);
+	}
+	
+	@ModelAttribute("vehiculos")
+	public Collection<Vehiculo> findVehiculos() {
+		return this.vehiculoService.findAllVehiculos();
+	}
+	
+	@ModelAttribute("conductores")
+	public Collection<Conductor> findConductores() {
+		return this.conductorService.findAllConductores();
 	}
 
 	@InitBinder("cliente")
@@ -87,19 +107,6 @@ public class ReservaController {
 		cliente.addReserva(reserva);
 		model.put("reserva", reserva);
 		model.put("tiposVehiculo", tiposVehiculo);
-		return "reserva/createPreReservaForm";
-	}
-
-	@GetMapping(value = "/reserva/init")
-	public String initReservaForm(Map<String, Object> model, Reserva reserva, String ciudad,
-			TipoVehiculo tipoVehiculo) {
-		model.put("reserva", reserva);
-		Collection<Vehiculo> vehiculos = vehiculoService.findVehiculosPorCiudadYFechaDisponibles(ciudad,
-				reserva.getFechaInicio(), reserva.getFechaFin());
-		Collection<Conductor> conductores = conductorService.findConductoresPorCiudadPermisoYFecha(ciudad, tipoVehiculo,
-				reserva.getFechaInicio(), reserva.getFechaFin());
-		model.put("vehiculos", vehiculos);
-		model.put("conductores", conductores);
 		return VIEWS_RESERVA_CREATE;
 	}
 
@@ -108,6 +115,8 @@ public class ReservaController {
 			throws DataAccessException, OverStockedVehicleException {
 		if (result.hasErrors()) {
 			model.put("reserva", reserva);
+			model.getAttribute("fechaInicio");
+			model.getAttribute("fechaFin");
 			return VIEWS_RESERVA_CREATE;
 		} else {
 			if (reserva.getFechaInicio().isAfter(reserva.getFechaFin())) {
@@ -134,19 +143,19 @@ public class ReservaController {
 				}
 
 			}
-			return "redirect:/reserva/" + reserva.getId();
+			return "redirect:/cliente/" + cliente.getId() + "/reserva/" + reserva.getId();
 		}
 	}
 
 	@GetMapping("/reserva/{reservaId}")
-	public ModelAndView showReserva(@PathVariable("reservasId") int reservaId) {
-		ModelAndView mav = new ModelAndView("reserva/reservasDetails");
+	public ModelAndView showReserva(@PathVariable("reservaId") int reservaId) {
+		ModelAndView mav = new ModelAndView("reserva/reservaDetails");
 		mav.addObject(this.reservaService.findReservaById(reservaId));
 		return mav;
 	}
 
 	@GetMapping("/reserva/{reservaId}/delete")
-	public String deleteOficina(@PathVariable("reservaId") int reservaId, @PathVariable("clinteId") int clienteId,
+	public String deleteOficina(@PathVariable("reservaId") int reservaId, @PathVariable("clienteId") int clienteId,
 			ModelMap model) throws CloseDateBookingException{
 		Reserva r = reservaService.findReservaById(reservaId);
 		Cliente c = clienteService.findClienteById(clienteId);
