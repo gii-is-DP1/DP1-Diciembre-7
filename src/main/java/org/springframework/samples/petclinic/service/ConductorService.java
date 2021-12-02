@@ -39,6 +39,11 @@ public class ConductorService {
 	public ConductorService(ConductorRepository conductorRepository) {
 		this.conductorRepository = conductorRepository;
 	}
+	
+	@Transactional(readOnly = true)
+	public Collection<Conductor> findAllConductor() throws DataAccessException{
+		return this.conductorRepository.findAllConductor();
+	}
 
 	@Transactional(readOnly = true)
 	public Conductor findConductorById(int id) throws DataAccessException {

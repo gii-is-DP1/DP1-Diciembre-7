@@ -79,6 +79,19 @@ public class ReservaController {
 	public void initVehiculoBinder(WebDataBinder dataBinder) {
 		dataBinder.setDisallowedFields("id");
 	}
+	
+	@GetMapping(value = "/reserva/nuevajs")
+	public String initNuevaReserva(Map<String, Object> model, Cliente cliente) {
+		Collection<TipoVehiculo> tiposVehiculo = vehiculoService.findTipoVehiculo();
+		Collection<Conductor> conductores = conductorService.findAllConductor();
+		Reserva reserva = new Reserva();
+		cliente.addReserva(reserva);
+		model.put("reserva", reserva);
+		model.put("tiposVehiculo", tiposVehiculo);
+		model.put("conductores", conductores);
+		return "reserva/createReservajs";
+	}
+	
 
 	@GetMapping(value = "/reserva/new")
 	public String initCreationForm(Map<String, Object> model, Cliente cliente) {
