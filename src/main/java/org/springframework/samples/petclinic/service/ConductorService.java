@@ -44,6 +44,10 @@ public class ConductorService {
 	public Conductor findConductorById(int id) throws DataAccessException {
 		return conductorRepository.findById(id);
 	}
+	@Transactional(readOnly = true)
+	public Conductor findConductorByUsername(String username) throws DataAccessException {
+		return conductorRepository.findByUsername(username);
+	}
 
 	@Transactional(readOnly = true)
 	public Collection<Conductor> findConductoresPorCiudadPermisoYFecha(String ciudad, TipoVehiculo tipoVehiculo,

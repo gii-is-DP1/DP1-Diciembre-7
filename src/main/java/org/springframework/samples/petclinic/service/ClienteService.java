@@ -32,6 +32,10 @@ public class ClienteService {
 	public Cliente findClienteById(int id) throws DataAccessException {
 		return clienteRepository.findById(id);
 	}
+	@Transactional(readOnly = true)
+	public Cliente findClienteByUsername(String username) throws DataAccessException {
+		return clienteRepository.findByUsername(username);
+	}
 	
 	@Transactional(rollbackFor = {DuplicatedTelephoneException.class, DuplicatedEmailException.class})
 	public void saveCliente(Cliente cliente) throws DataAccessException, DuplicatedTelephoneException, DuplicatedEmailException, DuplicatedDNIException{

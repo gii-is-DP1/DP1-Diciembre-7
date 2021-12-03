@@ -50,7 +50,6 @@ public class ReservaController {
 
 	private final ConductorService conductorService;
 	
-	private Environment environment;
 
 	@Autowired
 	ReservaController(ReservaService reservaService, VehiculoService vehiculoService, ConductorService conductorService,

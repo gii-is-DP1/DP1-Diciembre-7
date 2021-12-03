@@ -2,6 +2,7 @@ package org.springframework.samples.petclinic.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.model.BaseEntity;
 import org.springframework.samples.petclinic.model.Empresa;
 import org.springframework.samples.petclinic.repository.EmpresaRepository;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedEmailException;
@@ -29,7 +30,12 @@ public class EmpresaService {
 	public Empresa findEmpresaById(int id) throws DataAccessException {
 		return empresaRepository.findById(id);
 	}
-
+	
+	@Transactional(readOnly = true)
+	public Empresa findEmpresaByUsername(String username) throws DataAccessException {
+		return empresaRepository.findByUsername(username);
+	}
+	
 	@Transactional(rollbackFor = { DuplicatedTelephoneException.class, DuplicatedEmailException.class })
 	public void saveEmpresa(Empresa empresa)
 			throws DataAccessException, DuplicatedTelephoneException, DuplicatedEmailException {
