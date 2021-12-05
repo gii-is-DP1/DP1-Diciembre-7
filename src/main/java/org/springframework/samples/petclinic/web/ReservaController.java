@@ -1,13 +1,17 @@
 package org.springframework.samples.petclinic.web;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Cliente;
 import org.springframework.samples.petclinic.model.Conductor;
@@ -72,6 +76,14 @@ public class ReservaController {
 	public void initClienteBinder(WebDataBinder dataBinder) {
 		dataBinder.setDisallowedFields("id");
 	}
+	
+	@InitBinder
+	public void initBinder(WebDataBinder binder) {
+	  SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+	  dateFormat.setLenient(false);
+	  binder.registerCustomEditor(LocalDate.class,
+	  new CustomDateEditor(dateFormat, false));
+	}
 
 	@InitBinder("reserva")
 	public void initReservaBinder(WebDataBinder dataBinder) {
@@ -126,13 +138,16 @@ public class ReservaController {
 	@GetMapping(value = "/reserva/new")
 	public String initReservaForm(Map<String, Object> model, Cliente cliente) {
 		//Meter get de base de datos
-		PreReserva preReserva = (PreReserva) model.get("preReserva");
+		//PreReserva preReserva = (PreReserva) model.get("preReserva");
+		Collection<PreReserva> preReservas = this.preReservaService.findAllPreReservas();
+		PreReserva preReserva = (PreReserva) preReservas.toArray()[0];
 		Collection<Vehiculo> vehiculos = vehiculoService.findVehiculosPorCiudadYFechaDisponibles(preReserva.getCiudad(),
 				preReserva.getFechaInicio(), preReserva.getFechaFin());
 		Collection<Conductor> conductores = conductorService.findConductoresPorCiudadPermisoYFecha(preReserva.getCiudad(),
 				preReserva.getTipoVehiculo(), preReserva.getFechaInicio(), preReserva.getFechaFin());
 		Reserva reserva = new Reserva();
-		//cliente.addReserva(reserva);
+		cliente.addReserva(reserva);
+		model.put("preReserva", preReserva);
 		model.put("reserva", reserva);
 		model.put("vehiculos", vehiculos);
 		model.put("conductores", conductores);
@@ -143,6 +158,7 @@ public class ReservaController {
 	public String processCreationForm(Cliente cliente, @Valid Reserva reserva, BindingResult result, ModelMap model)
 			throws DataAccessException, OverStockedVehicleException {
 		if (result.hasErrors()) {
+			model.addAttribute("Message", "Salta esto");
 			model.put("reserva", reserva);
 			return VIEWS_RESERVA_CREATE;
 		} else {
@@ -164,7 +180,7 @@ public class ReservaController {
 					this.reservaService.saveReserva(reserva);
 					model.addAttribute("message", "La reserva se ha realizado con exito");
 				} catch (OverStockedVehicleException ex) {
-					result.rejectValue("stock", "", "");
+					result.rejectValue("stock", "ErrorAqui", "ErrorAqui");
 					model.put("reserva", reserva);
 					model.addAttribute("message", "No queda ningun vehiculo de ese modelo y marca");
 					return VIEWS_RESERVA_CREATE;

@@ -60,19 +60,23 @@ public class ConductorService {
 				conductoresCiudadYPermiso.add(c);
 			} else if (tiposVehiculos.contains(tipoVehiculo) && c.getPermisoBarco() == true
 					&& (tipoVehiculo.getName().equals("Lancha") || tipoVehiculo.getName().equals("Velero")
-							|| tipoVehiculo.getName().equals("Yate") || tipoVehiculo.getName().equals("motoAgua"))) {
+							|| tipoVehiculo.getName().equals("Yate") || tipoVehiculo.getName().equals("Moto de agua"))) {
 				conductoresCiudadYPermiso.add(c);
 			}
 		}
 		for (Conductor c : conductoresCiudadYPermiso) {
 			Collection<Reserva> reservasConductor = reservaRepository.findReservasByConductor(c);
-			for (Reserva r : reservasConductor) {
-				if (!(r.getFechaInicio().equals(fechaInicio)
-						|| (r.getFechaInicio().isAfter(fechaInicio) && r.getFechaInicio().isBefore(fechaFinal))
-						|| r.getFechaFin().equals(fechaFinal)
-						|| (r.getFechaFin().isAfter(fechaInicio)) && r.getFechaFin().isBefore(fechaFinal)
-						|| (r.getFechaInicio().isBefore(fechaInicio) && r.getFechaFin().isAfter(fechaFinal)))) {
-					conductoresCiudadPermisoYFecha.add(c);
+			if(reservasConductor.isEmpty()) {
+				conductoresCiudadPermisoYFecha.add(c);
+			}else {
+				for (Reserva r : reservasConductor) {
+					if (!(r.getFechaInicio().equals(fechaInicio)
+							|| (r.getFechaInicio().isAfter(fechaInicio) && r.getFechaInicio().isBefore(fechaFinal))
+							|| r.getFechaFin().equals(fechaFinal)
+							|| (r.getFechaFin().isAfter(fechaInicio)) && r.getFechaFin().isBefore(fechaFinal)
+							|| (r.getFechaInicio().isBefore(fechaInicio) && r.getFechaFin().isAfter(fechaFinal)))) {
+						conductoresCiudadPermisoYFecha.add(c);
+					}
 				}
 			}
 		}
