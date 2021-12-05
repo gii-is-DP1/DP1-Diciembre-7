@@ -20,7 +20,7 @@ public interface ClienteRepository extends Repository<Cliente, Integer> {
 	@Query("SELECT cliente FROM Cliente cliente WHERE cliente.dni =:dni")
 	public Cliente findByDNI(@Param("dni") String dni);
 	
-	@Query("SELECT cliente FROM Cliente cliente WHERE cliente.username =:username")
+	@Query("SELECT cliente FROM Cliente cliente WHERE cliente.user.username =:username")
 	public Cliente findByUsername(@Param("username") String username);
 
 	

@@ -19,7 +19,7 @@ public interface EmpresaRepository extends Repository<Empresa,String>{
 	@Query("SELECT empresa FROM Empresa empresa WHERE empresa.telefono =:telefono")
 	public Empresa findByTelefono(@Param("telefono") String string);
 	
-	@Query("SELECT empresa FROM Empresa empresa WHERE empresa.username =:username")
+	@Query("SELECT empresa FROM Empresa empresa WHERE empresa.user.username =:username")
 	public Empresa findByUsername(@Param("username") String username);
 	
 	void save(Empresa empresa) throws DataAccessException;

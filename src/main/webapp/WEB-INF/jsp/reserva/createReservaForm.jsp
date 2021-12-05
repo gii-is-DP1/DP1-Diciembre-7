@@ -47,8 +47,8 @@
 			</table>
 		</div>
 			<div class="control-group">
-                 <label for="selectPet">Choose a Vehiculo</label>
-                 <form:select id="selectPet" class="form-control"
+                 <label for="selectVehiculo">Choose a Vehiculo</label>
+                 <form:select id="selectVehiculo" class="form-control"
 						path="vehiculo" label="Vehiculo " size="5">
                  <c:forEach items="${vehiculos}" var="v">
                      <c:set var="nameVehiculo"
@@ -59,8 +59,8 @@
                  </form:select>
                 </div>
                 <div class="control-group">
-                 <label for="selectPet">Choose a Conductor</label>
-                 <form:select id="selectPet" class="form-control"
+                 <label for="selectConductor">Choose a Conductor</label>
+                 <form:select id="selectConductor" class="form-control"
 						path="conductor" label="Conductor " size="5">
                  <c:forEach items="${conductores}" var="c">
                      <c:set var="nameConductor" value="${c.nombre}" />
