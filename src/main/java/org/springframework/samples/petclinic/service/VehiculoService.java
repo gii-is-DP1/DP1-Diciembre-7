@@ -48,17 +48,23 @@ public class VehiculoService {
 
 	@Transactional(readOnly = true)
 	public Collection<Vehiculo> findVehiculosPorCiudadYFechaDisponibles(String ciudad, LocalDate fechaInicio,
-			LocalDate fechaFin) throws DataAccessException {
+			LocalDate fechaFin, TipoVehiculo tipo) throws DataAccessException {
 		Collection<Collection<Vehiculo>> vehiculosCiudad = vehiculoRepository.findVehiculosPorCiudad(ciudad);
 		Collection<Vehiculo> vehiculosCiudadYFechaDisponibles = new HashSet<>();
 		Set<Vehiculo> vehiculosCiudadAplanado = new HashSet<>();
+		Set<Vehiculo> vehiculosCiudadAplanadoYTipo = new HashSet<>();
 		if(vehiculosCiudad != null) {
 		for(Collection<Vehiculo> vehiculos:vehiculosCiudad) {
 			for(Vehiculo v: vehiculos) {
 				vehiculosCiudadAplanado.add(v);
 			}
 		}
-		for (Vehiculo v : vehiculosCiudadAplanado) {
+		for(Vehiculo v: vehiculosCiudadAplanado) {
+			if(v.getTipoVehiculo().equals(tipo)) {
+				vehiculosCiudadAplanadoYTipo.add(v);
+			}
+		}
+		for (Vehiculo v : vehiculosCiudadAplanadoYTipo) {
 			Integer stock = v.getStock();
 			Integer acum = 0;
 			Collection<Reserva> reservasVehiculo = reservaRepository.findReservasByVehiculo(v);

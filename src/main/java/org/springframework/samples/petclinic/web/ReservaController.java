@@ -137,12 +137,10 @@ public class ReservaController {
 	
 	@GetMapping(value = "/reserva/new")
 	public String initReservaForm(Map<String, Object> model, Cliente cliente) {
-		//Meter get de base de datos
-		//PreReserva preReserva = (PreReserva) model.get("preReserva");
 		Collection<PreReserva> preReservas = this.preReservaService.findAllPreReservas();
 		PreReserva preReserva = (PreReserva) preReservas.toArray()[0];
 		Collection<Vehiculo> vehiculos = vehiculoService.findVehiculosPorCiudadYFechaDisponibles(preReserva.getCiudad(),
-				preReserva.getFechaInicio(), preReserva.getFechaFin());
+				preReserva.getFechaInicio(), preReserva.getFechaFin(), preReserva.getTipoVehiculo());
 		Collection<Conductor> conductores = conductorService.findConductoresPorCiudadPermisoYFecha(preReserva.getCiudad(),
 				preReserva.getTipoVehiculo(), preReserva.getFechaInicio(), preReserva.getFechaFin());
 		Reserva reserva = new Reserva();
@@ -264,7 +262,7 @@ public class ReservaController {
 	}
 
 	@GetMapping("/reserva/{reservaId}/delete")
-	public String deleteOficina(@PathVariable("reservaId") int reservaId, @PathVariable("clinteId") int clienteId,
+	public String deleteOficina(@PathVariable("reservaId") int reservaId, @PathVariable("clienteid") int clienteId,
 			ModelMap model) throws CloseDateBookingException{
 		Reserva r = reservaService.findReservaById(reservaId);
 		Cliente c = clienteService.findClienteById(clienteId);
@@ -277,14 +275,14 @@ public class ReservaController {
 				}
 				reservaService.deleteReservaById(reservaId);
 				model.addAttribute("message", "La reserva se ha eliminado correctamente.");
-				return "redirect:/cliente/{clienteId}";
+				return "redirect:/cliente/{clienteid}";
 			} catch (CloseDateBookingException ex) {
 				model.addAttribute("message", "El periodo de cancelacion ya ha acabado");
-				return "redirect:/cliente/{clienteId}";
+				return "redirect:/cliente/{clienteid}";
 			}
 		} else {
 			model.addAttribute("message", "No se ha encontrado la reserva que quiere eliminar.");
-			return "redirect:/cliente/{clienteId}";
+			return "redirect:/cliente/{clienteid}";
 		}
 	}
 
