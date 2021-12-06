@@ -25,7 +25,7 @@
 				<petclinic:menuItem active="${name eq 'home'}" url="/"
 					title="home page">
 					<span class="glyphicon glyphicon-home" aria-hidden="true"></span>
-					<span>Home</span>
+					<span>Inicio</span>
 				</petclinic:menuItem>
 			</ul>
 
@@ -36,8 +36,8 @@
 				<sec:authorize access="!isAuthenticated()">
 					<li><a href="<c:url value="/login" />">Login</a></li>
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
-						data-toggle="dropdown"> <span class="glyphicon glyphicon-user"></span>Â 
-							<strong>AnÃ³nimo</strong> <span
+						data-toggle="dropdown"> <span class="glyphicon glyphicon-user"></span> 
+							<strong>Anonimo</strong> <span
 							class="glyphicon glyphicon-chevron-down"></span>
 					</a>
 					<ul class="dropdown-menu">
@@ -67,9 +67,16 @@
 					<li><a href="<c:url value="/reserva" />">Nueva Reserva</a></li>
 					<li><a href="<c:url value="/reservas" />">Mis Reservas</a></li>
 				</sec:authorize>
+				<sec:authorize access="hasAuthority('empresa')">
+					<li><a href="<c:url value="/oficina" />">Nueva Oficina</a></li>
+					<li><a href="<c:url value="/oficinas" />">Mis Oficinas</a></li>
+				</sec:authorize>
+				<sec:authorize access="hasAuthority('conductor')">
+					<li><a href="<c:url value="/servicios" />">Mis Servicios</a></li>
+				</sec:authorize>
 				<sec:authorize access="isAuthenticated()">
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
-						data-toggle="dropdown"> <span class="glyphicon glyphicon-user"></span>Â 
+						data-toggle="dropdown"> <span class="glyphicon glyphicon-user"></span>
 							<strong><sec:authentication property="name" /></strong> <span
 							class="glyphicon glyphicon-chevron-down"></span>
 					</a>
@@ -88,7 +95,7 @@
 											</p>
 											<p class="text-left">
 												<a href="<c:url value="/logout" />"
-													class="btn btn-primary btn-block btn-sm">Logout</a>
+													class="btn btn-primary btn-block btn-sm">Cerrar sesión</a>
 											</p>
 										</div>
 									</div>

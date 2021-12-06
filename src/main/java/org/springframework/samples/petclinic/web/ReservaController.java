@@ -57,7 +57,6 @@ public class ReservaController {
 
 	private final ConductorService conductorService;
 	
-
 	private final PreReservaService preReservaService;
 
 	@Autowired
@@ -195,67 +194,6 @@ public class ReservaController {
 			return "redirect:/cliente/{clienteid}/reserva/" + reserva.getId();
 		}
 	}
-	
-	
-	
-	
-	/*@GetMapping(value = "/reserva/new")
-	public String initCreationForm(Map<String, Object> model, Cliente cliente) throws DataAccessException, OverStockedVehicleException {
-		Collection<TipoVehiculo> tiposVehiculo = vehiculoService.findTipoVehiculo();
-		Reserva reserva = new Reserva();
-		cliente.addReserva(reserva);
-		model.put("reserva", reserva);
-		model.put("tiposVehiculo", tiposVehiculo);
-		return "reserva/createPreReservaForm";
-	}
-
-	@GetMapping(value = "/reserva/init")
-	public String initReservaForm(Map<String, Object> model, Reserva reserva, String ciudad,
-			TipoVehiculo tipoVehiculo) {
-		model.put("reserva", reserva);
-		Collection<Vehiculo> vehiculos = vehiculoService.findVehiculosPorCiudadYFechaDisponibles(ciudad,
-				reserva.getFechaInicio(), reserva.getFechaFin());
-		Collection<Conductor> conductores = conductorService.findConductoresPorCiudadPermisoYFecha(ciudad, tipoVehiculo,
-				reserva.getFechaInicio(), reserva.getFechaFin());
-		model.put("vehiculos", vehiculos);
-		model.put("conductores", conductores);
-		return VIEWS_RESERVA_CREATE;
-	}
-
-	@PostMapping(value = "/reserva/new")
-	public String processCreationForm(Cliente cliente, @Valid Reserva reserva, BindingResult result, ModelMap model)
-			throws DataAccessException, OverStockedVehicleException {
-		if (result.hasErrors()) {
-			model.put("reserva", reserva);
-			return VIEWS_RESERVA_CREATE;
-		} else {
-			if (reserva.getFechaInicio().isAfter(reserva.getFechaFin())) {
-				model.put("reserva", reserva);
-				model.addAttribute("Message", "La fecha de fin debe ser mas tarde que la de inicio");
-				return VIEWS_RESERVA_CREATE;
-			} else if (reserva.getFechaInicio().isBefore(LocalDate.now())) {
-				model.put("reserva", reserva);
-				model.addAttribute("Message", "La fecha de inicio no puede estar en el pasado");
-			} else {
-				try {
-					if (reserva.getConductor() != null) {
-						reserva.getConductor().addReserva(reserva);
-					}
-					reserva.getVehiculo().addReserva(reserva);
-					cliente.addReserva(reserva);
-					this.reservaService.saveReserva(reserva);
-					model.addAttribute("message", "La reserva se ha realizado con exito");
-				} catch (OverStockedVehicleException ex) {
-					result.rejectValue("stock", "", "");
-					model.put("reserva", reserva);
-					model.addAttribute("message", "No queda ningun vehiculo de ese modelo y marca");
-					return VIEWS_RESERVA_CREATE;
-				}
-
-			}
-			return "redirect:/reserva/" + reserva.getId();
-		}
-	}*/
 
 	@GetMapping("/reserva/{reservaId}")
 	public ModelAndView showReserva(@PathVariable("reservaId") int reservaId) {
@@ -278,23 +216,21 @@ public class ReservaController {
 				}
 				reservaService.deleteReservaById(reservaId);
 				model.addAttribute("message", "La reserva se ha eliminado correctamente.");
-				return "redirect:/cliente/{clienteid}";
+				return "redirect:/reservas";
 			} catch (CloseDateBookingException ex) {
 				model.addAttribute("message", "El periodo de cancelacion ya ha acabado");
-				return "redirect:/cliente/{clienteid}";
+				return "redirect:/reservas";
 			}
 		} else {
 			model.addAttribute("message", "No se ha encontrado la reserva que quiere eliminar.");
-			return "redirect:/cliente/{clienteid}";
+			return "redirect:/reservas";
 		}
 	}
 	
 	@GetMapping(value ="/reservas")
 	public String allReservas(Cliente cliente, BindingResult result, Map<String,Object> model){
 		Collection<Reserva> results = this.reservaService.findReservasByCliente(cliente);
-		SortedSet<Reserva> resultsOrdered = new TreeSet<>();
-		resultsOrdered.addAll(results);
-		model.put("selections", resultsOrdered);
+		model.put("selections", results);
 		return "cliente/reservasList";
 	}
 

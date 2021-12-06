@@ -32,11 +32,21 @@
 		</tr>
 		<tr>
 			<th>Permiso de coche</th>
-			<td><c:out value="${conductor.permisoCoche}" /></td>
+			<c:if test="${conductor.permisoCoche}">
+			<td><c:out value="Disponible" /></td>
+			</c:if>	
+			<c:if test="${!conductor.permisoCoche}">
+			<td><c:out value="No disponible" /></td>
+			</c:if>
 		</tr>
 		<tr>
 			<th>Permiso de barco</th>
-			<td><c:out value="${conductor.permisoBarco}" /></td>
+			<c:if test="${conductor.permisoBarco}">
+			<td><c:out value="Disponible" /></td>
+			</c:if>	
+			<c:if test="${!conductor.permisoBarco}">
+			<td><c:out value="No disponible" /></td>
+			</c:if>
 		</tr>
 		<tr>
 			<th>Salario base</th>

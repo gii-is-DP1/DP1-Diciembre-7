@@ -55,12 +55,29 @@ public class ProfileController {
 	@GetMapping("/reserva")
 	public String currentReserva(Authentication authentication) {
 		int id = clienteService.findClienteByUsername(authentication.getName()).getId();
-		return "redirect:/cliente/" + id + "/reserva/new";
+		return "redirect:/cliente/" + id + "/preReserva/new";
 	}
 
 	@GetMapping("/reservas")
 	public String currentReservas(Authentication authentication) {
 		int id = clienteService.findClienteByUsername(authentication.getName()).getId();
 		return "redirect:/cliente/" + id + "/reservas";
+	}
+	
+	@GetMapping("/oficina")
+	public String currentOficina(Authentication authentication) {
+		int id = empresaService.findEmpresaByUsername(authentication.getName()).getId();
+		return "redirect:/empresa/" + id + "/oficina/new";
+	}
+
+	@GetMapping("/oficinas")
+	public String currentOficinas(Authentication authentication) {
+		int id = empresaService.findEmpresaByUsername(authentication.getName()).getId();
+		return "redirect:/empresa/" + id + "/oficinas";
+	}
+	@GetMapping("/servicios")
+	public String currentServicios(Authentication authentication) {
+		int id = conductorService.findConductorByUsername(authentication.getName()).getId();
+		return "redirect:/conductor/" + id + "/servicios";
 	}
 }
