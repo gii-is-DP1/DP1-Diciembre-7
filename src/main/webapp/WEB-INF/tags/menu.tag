@@ -36,8 +36,8 @@
 				<sec:authorize access="!isAuthenticated()">
 					<li><a href="<c:url value="/login" />">Login</a></li>
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
-						data-toggle="dropdown"> <span class="glyphicon glyphicon-user"></span>�
-							<strong>An�nimo</strong> <span
+						data-toggle="dropdown"> <span class="glyphicon glyphicon-user"></span> 
+							<strong>Anónimo</strong> <span
 							class="glyphicon glyphicon-chevron-down"></span>
 					</a>
 					<ul class="dropdown-menu">
@@ -69,7 +69,7 @@
 				</sec:authorize>
 				<sec:authorize access="isAuthenticated()">
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
-						data-toggle="dropdown"> <span class="glyphicon glyphicon-user"></span>�
+						data-toggle="dropdown"> <span class="glyphicon glyphicon-user"></span> 
 							<strong><sec:authentication property="name" /></strong> <span
 							class="glyphicon glyphicon-chevron-down"></span>
 					</a>

@@ -52,6 +52,9 @@ public class ReservaService {
 		Vehiculo vehiculo = reserva.getVehiculo();
 		Integer diasReserva = reserva.getFechaFin().getDayOfYear()-reserva.getFechaInicio().getDayOfYear();
 		Double precioTotal = vehiculo.getPrecioBase() + (vehiculo.getPrecioPorDia()*diasReserva);
+		if(reserva.getConductor() != null) {
+			precioTotal += reserva.getConductor().getSalarioBase() + (reserva.getConductor().getSalarioPorDia() * diasReserva);
+		}
 		Collection<Reserva> reservasVehiculo = findReservasByVehiculo(vehiculo);
 		Set<Reserva> reservasVehiculoActuales = new HashSet<Reserva>();
 		for (Reserva r : reservasVehiculo) {
