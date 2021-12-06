@@ -4,14 +4,18 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.model.Cliente;
 import org.springframework.samples.petclinic.model.Empresa;
 import org.springframework.samples.petclinic.model.Oficina;
 import org.springframework.samples.petclinic.model.Owner;
+import org.springframework.samples.petclinic.model.Reserva;
 import org.springframework.samples.petclinic.model.Vehiculo;
 import org.springframework.samples.petclinic.repository.OficinaRepository;
 import org.springframework.samples.petclinic.service.EmpresaService;
@@ -138,6 +142,13 @@ public class OficinaController {
  			return "redirect:/empresa/{empresaId}";
  		}
  	}
+	
+	@GetMapping(value ="/oficinas")
+	public String allReservas(Empresa empresa, BindingResult result, Map<String,Object> model){
+		Collection<Oficina> results = this.oficinaService.findOficinaByEmpresa(empresa.getId());
+		model.put("selections", results);
+		return "empresa/oficinasList";
+	}
 	
 	
 

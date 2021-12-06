@@ -1,15 +1,21 @@
 package org.springframework.samples.petclinic.web;
 
+import java.util.Collection;
 import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.model.Cliente;
 import org.springframework.samples.petclinic.model.Conductor;
+import org.springframework.samples.petclinic.model.Reserva;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.ConductorService;
+import org.springframework.samples.petclinic.service.ReservaService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedDNIException;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedEmailException;
@@ -21,8 +27,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -31,11 +39,18 @@ public class ConductorController {
 	private static final String VIEWS_CONDUCTOR_CREATE_OR_UPDATE = "conductor/createOrUpdateConductorForm";
 
 	private final ConductorService conductorService;
+	
+	private final ReservaService reservaService;
 
 	@Autowired
-	ConductorController(ConductorService conductorService, UserService userService,
+	ConductorController(ConductorService conductorService, ReservaService reservaService, UserService userService,
 			AuthoritiesService authoritiesService) {
 		this.conductorService = conductorService;
+		this.reservaService = reservaService;
+	}
+	@ModelAttribute("conductor")
+	public Conductor findConductor(@PathVariable("conductorId") int conductorId) {
+		return this.conductorService.findConductorById(conductorId);
 	}
 
 	@InitBinder
@@ -150,5 +165,13 @@ public class ConductorController {
 		mav.addObject(this.conductorService.findConductorById(conductorId));
 		return mav;
 	}
+	
+	@GetMapping(value="/conductor/{conductorId}/servicios")
+	public String allServicios(Conductor conductor, BindingResult result, Map<String,Object> model){
+		Collection<Reserva> results = this.reservaService.findReservasByConductor(conductor);
+		model.put("selections", results);
+		return "conductor/serviciosList";
+	}
+
 
 }

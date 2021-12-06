@@ -39,14 +39,14 @@
 		<spring:param name="oficinaId" value="${oficina.id}" />
 		<spring:param name="vehiculoId" value="${vehiculo.id}" />		
 	</spring:url>
-	<a href="${fn:escapeXml(deleteUrl)}" class="btn btn-default">Delete
+	<a href="${fn:escapeXml(deleteUrl)}" class="btn btn-default">Eliminar
 		Vehiculo</a>
 	<spring:url value="/empresa/{empresaId}/oficina/{oficinaId}/vehiculo/{vehiculoId}/edit" var="editUrl">
 		<spring:param name="empresaId" value="${oficina.empresa.id}" />
 		<spring:param name="oficinaId" value="${oficina.id}" />
 		<spring:param name="vehiculoId" value="${vehiculo.id}" />
 	</spring:url>
-	<a href="${fn:escapeXml(editUrl)}" class="btn btn-default">Edit
+	<a href="${fn:escapeXml(editUrl)}" class="btn btn-default">Actualizar
 		Vehiculo</a>
 
 </petclinic:layout>
