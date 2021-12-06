@@ -92,7 +92,7 @@ public class ClienteController {
 				model.addAttribute("message", "Ya existe un cliente con este nombre de usuario");
 			}
 
-			return "redirect:/cliente/" + cliente.getId();
+			return "/welcome";
 		}
 	}
 

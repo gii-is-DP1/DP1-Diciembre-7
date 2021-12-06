@@ -21,11 +21,14 @@
 					<petclinic:inputField label="Email" name="email" />
 					<petclinic:inputField label="Pais" name="pais" />
 					<petclinic:inputField label="Username" name="user.username" />
-					<petclinic:inputField label="Password" name="user.password" hidden=true/>
+					<petclinic:inputField label="Password" name="user.password"/>
 				</div>
 			</c:when>
 			<c:otherwise>
 				<div class="form-group has-feedback">
+					<input type="hidden" name="id" value="${empresa.id}"/>
+					<input type="hidden" name="user.username" value="${user.username}"/>
+					<input type="hidden" name="user.password" value="${user.password}"/>
 					<petclinic:inputField label="Nombre" name="nombre" />
 					<petclinic:inputField label="Telefono" name="telefono"/>
 					<petclinic:inputField label="Email" name="email" />

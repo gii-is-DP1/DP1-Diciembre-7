@@ -64,8 +64,9 @@
 						</dd>
 					</dl>
 				</td>
-				<td><spring:url value="/oficina/{oficinaId}" var="oficinaUrl">
+				<td><spring:url value="/empresa/{empresaId}/oficina/{oficinaId}" var="oficinaUrl">
 						<spring:param name="oficinaId" value="${oficina.id}" />
+						<spring:param name="empresaId" value="${empresa.id}" />
 					</spring:url> <a href="${fn:escapeXml(oficinaUrl)}">Vista Detallada</a></td>
 			<tr>
 		</c:forEach>
