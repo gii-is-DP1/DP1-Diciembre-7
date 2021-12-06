@@ -10,12 +10,18 @@ INSERT INTO authorities(id,username,authority) VALUES (3,'vet1','veterinarian');
 -- One client user, named cliente1 with password cliente1
 INSERT INTO users(username,password,enabled) VALUES('cliente1','cliente1',TRUE);
 INSERT INTO authorities(id,username,authority) VALUES (4, 'cliente1', 'cliente');
+-- One client user, named cliente2 with password cliente2
+INSERT INTO users(username,password,enabled) VALUES('cliente2','cliente2',TRUE);
+INSERT INTO authorities(id,username,authority) VALUES (5, 'cliente2', 'cliente');
 -- One empresa user, named conductor1 with password conductor1
 INSERT INTO users(username,password,enabled) VALUES('empresa1','empresa1',TRUE);
-INSERT INTO authorities(id,username,authority) VALUES (5, 'empresa1', 'empresa');
+INSERT INTO authorities(id,username,authority) VALUES (6, 'empresa1', 'empresa');
+-- One empresa user, named conductor2 with password conductor2
+INSERT INTO users(username,password,enabled) VALUES('conductor2','conductor2',TRUE);
+INSERT INTO authorities(id,username,authority) VALUES (7, 'conductor2', 'conductor');
 -- One conductor user, named conductor1 with password conductor1
 INSERT INTO users(username,password,enabled) VALUES('conductor1','conductor1',TRUE);
-INSERT INTO authorities(id,username,authority) VALUES (6, 'conductor1', 'conductor');
+INSERT INTO authorities(id,username,authority) VALUES (8, 'conductor1', 'conductor');
 
 INSERT INTO vets VALUES (1, 'James', 'Carter');
 INSERT INTO vets VALUES (2, 'Helen', 'Leary');
@@ -51,13 +57,13 @@ INSERT INTO types VALUES (5, 'bird');
 INSERT INTO types VALUES (6, 'hamster');
 
 INSERT INTO cliente VALUES (1, 'example@example.com','Javier','665738445','Avenida Reina Mercedes s/n','17473663B','cliente1');
-INSERT INTO cliente VALUES (2, 'simeon@simeon.com','Simeon','123456789','Avenida Reina Mercedes s/n','12641431V','cliente1');
+INSERT INTO cliente VALUES (2, 'simeon@simeon.com','Simeon','123456789','Avenida Reina Mercedes s/n','12641431V','cliente2');
 
 INSERT INTO empresa VALUES (1, 'example@example.com','Universidad de Sevilla','665738445','España','empresa1');
 INSERT INTO empresa VALUES (2, 'ejemplo@ejemplo.com','Aytos','123456789','España','empresa1');
 
 INSERT INTO conductor VALUES(1, 'simeon@simeon.com','Simeon','123456789','Sevilla','12641431V','7',TRUE,FALSE,150.0,12.0,'conductor1');
-INSERT INTO conductor VALUES(2, 'example@example.com','Javier','665738445','Sevilla','17473663B','9',TRUE,TRUE,180.0,20.0,'conductor1');
+INSERT INTO conductor VALUES(2, 'example@example.com','Javier','665738445','Sevilla','17473663B','9',TRUE,TRUE,180.0,20.0,'conductor2');
 
 INSERT INTO oficinas(id,ciudad,codigo_postal,direccion,empresa_id) VALUES(1,'Sevilla', 41400,'Avenida Reina Mercedes s/n', 1);
 INSERT INTO oficinas(id,ciudad,codigo_postal,direccion,empresa_id) VALUES(2,'Madrid', 41400,'Plaza del Sol', 1);

@@ -5,6 +5,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Cliente;
 import org.springframework.samples.petclinic.repository.ClienteRepository;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedTelephoneException;
+import org.springframework.samples.petclinic.service.exceptions.DuplicatedUsernameException;
 import org.springframework.stereotype.Service;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedDNIException;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedEmailException;
@@ -32,19 +33,26 @@ public class ClienteService {
 	public Cliente findClienteById(int id) throws DataAccessException {
 		return clienteRepository.findById(id);
 	}
+	@Transactional(readOnly = true)
+	public Cliente findClienteByUsername(String username) throws DataAccessException {
+		return clienteRepository.findByUsername(username);
+	}
 	
 	@Transactional(rollbackFor = {DuplicatedTelephoneException.class, DuplicatedEmailException.class})
-	public void saveCliente(Cliente cliente) throws DataAccessException, DuplicatedTelephoneException, DuplicatedEmailException, DuplicatedDNIException{
+	public void saveCliente(Cliente cliente) throws DataAccessException, DuplicatedTelephoneException, DuplicatedEmailException, DuplicatedDNIException, DuplicatedUsernameException{
 		Cliente cE = clienteRepository.findByEmail(cliente.getEmail());
 		Cliente cT = clienteRepository.findByTelefono(cliente.getTelefono());
 		Cliente cD = clienteRepository.findByDNI(cliente.getDni());
+		Cliente cU = clienteRepository.findByUsername(cliente.getUser().getUsername());
 
 		if((cT != null) && !(cT.getId().equals(cliente.getId()))) {
 			throw new DuplicatedTelephoneException();
 		}else if((cE != null) && !(cE.getId().equals(cliente.getId()))){
 			throw new DuplicatedEmailException();
-		}else if((cD != null) && !(cE.getId().equals(cliente.getId()))) {
+		}else if((cD != null) && !(cD.getId().equals(cliente.getId()))) {
 			throw new  DuplicatedDNIException();
+		}else if((cU != null) && !(cU.getId().equals(cliente.getId()))){
+			throw new DuplicatedUsernameException(); 
 		}else {	
 			clienteRepository.save(cliente);
 			

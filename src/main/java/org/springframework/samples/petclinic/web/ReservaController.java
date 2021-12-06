@@ -7,6 +7,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import javax.validation.Valid;
 
@@ -55,6 +57,7 @@ public class ReservaController {
 
 	private final ConductorService conductorService;
 	
+
 	private final PreReservaService preReservaService;
 
 	@Autowired
@@ -284,6 +287,15 @@ public class ReservaController {
 			model.addAttribute("message", "No se ha encontrado la reserva que quiere eliminar.");
 			return "redirect:/cliente/{clienteid}";
 		}
+	}
+	
+	@GetMapping(value ="/reservas")
+	public String allReservas(Cliente cliente, BindingResult result, Map<String,Object> model){
+		Collection<Reserva> results = this.reservaService.findReservasByCliente(cliente);
+		SortedSet<Reserva> resultsOrdered = new TreeSet<>();
+		resultsOrdered.addAll(results);
+		model.put("selections", resultsOrdered);
+		return "cliente/reservasList";
 	}
 
 }

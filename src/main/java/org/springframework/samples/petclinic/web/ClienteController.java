@@ -14,6 +14,7 @@ import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedDNIException;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedEmailException;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedTelephoneException;
+import org.springframework.samples.petclinic.service.exceptions.DuplicatedUsernameException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -52,7 +53,7 @@ public class ClienteController {
 
 	@PostMapping(value = "/cliente/new")
 	public String processCreationForm(@Valid Cliente cliente, BindingResult result, ModelMap model)
-			throws DataAccessException, DuplicatedTelephoneException, DuplicatedEmailException {
+			throws DataAccessException, DuplicatedTelephoneException, DuplicatedEmailException, DuplicatedUsernameException {
 		if (result.hasErrors()) {
 			model.put("cliente", cliente);
 			return VIEWS_CLIENTE_CREATE_OR_UPDATE;
@@ -85,6 +86,10 @@ public class ClienteController {
 				result.rejectValue("dni", "duplicated", "already exists");
 				model.put("cliente", cliente);
 				model.addAttribute("message", "Ya existe un cliente con este DNI");
+			}catch (DuplicatedUsernameException ex3) {
+				result.rejectValue("username", "duplicated", "already exists");
+				model.put("cliente", cliente);
+				model.addAttribute("message", "Ya existe un cliente con este nombre de usuario");
 			}
 
 			return "/welcome";
