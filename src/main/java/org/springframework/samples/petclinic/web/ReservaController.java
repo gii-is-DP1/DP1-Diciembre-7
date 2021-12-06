@@ -162,6 +162,10 @@ public class ReservaController {
 			model.put("reserva", reserva);
 			return VIEWS_RESERVA_CREATE;
 		} else {
+			Collection<PreReserva> preReservas = this.preReservaService.findAllPreReservas();
+			PreReserva preReserva = (PreReserva) preReservas.toArray()[0];
+			reserva.setFechaInicio(preReserva.getFechaInicio());
+			reserva.setFechaFin(preReserva.getFechaFin());
 			if (reserva.getFechaInicio().isAfter(reserva.getFechaFin())) {
 				model.put("reserva", reserva);
 				model.addAttribute("Message", "La fecha de fin debe ser mas tarde que la de inicio");
@@ -187,7 +191,7 @@ public class ReservaController {
 				}
 
 			}
-			return "redirect:/reserva/" + reserva.getId();
+			return "redirect:/cliente/{clienteid}/reserva/" + reserva.getId();
 		}
 	}
 	
@@ -253,8 +257,8 @@ public class ReservaController {
 	}*/
 
 	@GetMapping("/reserva/{reservaId}")
-	public ModelAndView showReserva(@PathVariable("reservasId") int reservaId) {
-		ModelAndView mav = new ModelAndView("reserva/reservasDetails");
+	public ModelAndView showReserva(@PathVariable("reservaId") int reservaId) {
+		ModelAndView mav = new ModelAndView("reserva/reservaDetails");
 		mav.addObject(this.reservaService.findReservaById(reservaId));
 		return mav;
 	}
