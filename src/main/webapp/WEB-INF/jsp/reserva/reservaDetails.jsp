@@ -54,9 +54,6 @@
 			<th>Precio por dia</th>
 			<td><c:out value="${reserva.vehiculo.precioPorDia}" /></td>
 
-			<td><spring:url value="/vehiculo/{vehiculoId}" var="vehiculoUrl">
-					<spring:param name="vehiculoId" value="${reserva.vehiculo.id}" />
-				</spring:url> <a href="${fn:escapeXml(vehiculoUrl)}">Vista Detallada</a></td>
 		</tr>
 	</table>
 	<br />
@@ -80,9 +77,6 @@
 			<th>Salario por dia</th>
 			<td><c:out value="${reserva.conductor.salarioPorDia}" /></td>
 
-			<td><spring:url value="/conductor/{conductorId}" var="conductorUrl">
-					<spring:param name="conductorId" value="${reserva.conductor.id}" />
-				</spring:url> <a href="${fn:escapeXml(conductorUrl)}">Vista Detallada</a></td>
 		</tr>
 	</table>
 </petclinic:layout>
