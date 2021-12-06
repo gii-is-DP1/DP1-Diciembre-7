@@ -7,45 +7,21 @@
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags"%>
 
 <petclinic:layout pageName="reserva">
-	<jsp:attribute name="customScript">
-        <script>
-									$(function() {
-										$("#fechaInicio").datepicker({
-											dateFormat : 'yy/mm/dd'
-										});
-									});
-								</script>
-								 <script>
-										$(function() {
-											$("#fechaFin").datepicker({
-												dateFormat : 'yy/mm/dd'
-											});
-										});
-									</script>
-    </jsp:attribute>
 	<jsp:body>   
 	<h2>
 		Nueva Reserva
 	</h2>
+	<p>${Message}</p>
 	<form:form modelAttribute="reserva" class="form-horizontal"
 			id="add-reserva-form" method="post"
-			action="/cliente/${clienteId}/reserva/new">
+			action="/cliente/${clienteid}/reserva/new">
 		<div class="form-group has-feedback">
 			<input type="hidden" name="id" value="${reserva.id}" />
-			<div class="form-group has-feedback">
-			<table class="table table-striped">
-				<tr>
-					<td valign="top">
-						<dl class="dl-horizontal">
-							<petclinic:inputField label="Fecha Inicio" name="fechaInicio" />
-							<petclinic:inputField label="Fecha Fin" name="fechaFin" />
-							<petclinic:inputField label="Ciudad" name="ciudad">
-							</petclinic:inputField>
-						</dl>
-					</td>
-				</tr>
-			</table>
-		</div>
+			<!--  <input type="hidden" name="fechaInicio" value="${preReserva.fechaInicio}" />
+			<input type="hidden" name="fechaFin" value="${preReserva.fechaFin}" />-->
+			<form:input path="fechaInicio" value="${preReserva.fechaInicio}" disabled="true" />
+			<form:input path="fechaFin" value="${preReserva.fechaFin}" disabled="true" />
+			<input type="hidden" name="ciudad" value="${preReserva.ciudad}" />
 			<div class="control-group">
                  <label for="selectVehiculo">Choose a Vehiculo</label>
                  <form:select id="selectVehiculo" class="form-control"

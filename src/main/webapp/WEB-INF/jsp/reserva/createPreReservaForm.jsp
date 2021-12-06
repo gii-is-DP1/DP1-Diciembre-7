@@ -6,21 +6,54 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags"%>
 
-<petclinic:layout pageName="reserva">
-	
-	<h2>Nueva Reserva</h2>
-	<form:form modelAttribute="reserva" class="form-horizontal"
-			id="add-reserva-form" method="post"
-			action="/cliente/${clienteId}/reserva/new">
-		
-		<div class="form-group">
+<petclinic:layout pageName="preReserva">
+	<jsp:attribute name="customScript">
+        <script>
+									$(function() {
+										$("#fechaInicio").datepicker({
+											dateFormat : 'yy/mm/dd'
+										});
+									});
+								</script>
+								 <script>
+										$(function() {
+											$("#fechaFin").datepicker({
+												dateFormat : 'yy/mm/dd'
+											});
+										});
+									</script>
+    </jsp:attribute>
+	<jsp:body>   
+	<h2>
+		Nueva Reserva
+	</h2>
+	<form:form modelAttribute="preReserva" class="form-horizontal"
+			id="add-preReserva-form" method="post"
+			action="/cliente/${clienteid}/preReserva/new">
+		<div class="form-group has-feedback">
+			<input type="hidden" name="id" value="${preReserva.id}" />
+			<div class="form-group has-feedback">
+					<petclinic:inputField label="Fecha Inicio" name="fechaInicio" />
+					<petclinic:inputField label="Fecha Fin" name="fechaFin" />
+					<petclinic:inputField label="Ciudad" name="ciudad"/>
+				<div class="control-group">
+                 <label for="selectTipoVehiculo">Elige un tipo de vehiculo</label>
+                 <form:select id="selectTipoVehiculo" class="form-control"
+						path="tipoVehiculo" label="Tipo Vehiculo " size="5">
+                 <c:forEach items="${tiposVehiculo}" var="t">
+                     <c:set var="nombreTipo" value="${t.name}" />
+                    <form:option name="tipoVehiculo" value="${t}"> <c:out
+									value="${nombreTipo}"></c:out> </form:option>
+                  </c:forEach>
+                 </form:select>
+                </div>
+		</div>
+	</div>
+	<div class="form-group">
 			<div class="col-sm-offset-2 col-sm-10">
-
-				<button class="btn btn-default" type="submit">Continuar con
-					la reserva</button>
+				<button class="btn btn-default" type="submit">Siguiente</button>
 			</div>
 		</div>
 	</form:form>
-
-
+	    </jsp:body>
 </petclinic:layout>

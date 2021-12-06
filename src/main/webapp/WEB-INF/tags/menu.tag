@@ -35,7 +35,33 @@
 			<ul class="nav navbar-nav navbar-right">
 				<sec:authorize access="!isAuthenticated()">
 					<li><a href="<c:url value="/login" />">Login</a></li>
-					<li><a href="<c:url value="/users/new" />">Register</a></li>
+					<li class="dropdown"><a href="#" class="dropdown-toggle"
+						data-toggle="dropdown"> <span class="glyphicon glyphicon-user"></span> 
+							<strong>Anónimo</strong> <span
+							class="glyphicon glyphicon-chevron-down"></span>
+					</a>
+					<ul class="dropdown-menu">
+							<li>
+								<div class="navbar-login">
+									<div class="row">
+										<div class="col-lg-12">
+											<p class="text-left">
+												<a href="<c:url value="/cliente/new" />"
+													class="btn btn-primary btn-block btn-sm">Registrar cliente</a>
+											</p>
+											<p class="text-left">
+												<a href="<c:url value="/conductor/new" />"
+													class="btn btn-primary btn-block btn-sm">Registrar conductor</a>
+											</p>
+											<p class="text-left">
+												<a href="<c:url value="/empresa/new" />"
+													class="btn btn-primary btn-block btn-sm">Registrar empresa</a>
+											</p>
+										</div>
+									</div>
+								</div>
+							</li>
+						</ul>
 				</sec:authorize>
 				<sec:authorize access="hasAuthority('cliente')">
 					<li><a href="<c:url value="/reserva" />">Nueva Reserva</a></li>
@@ -43,7 +69,7 @@
 				</sec:authorize>
 				<sec:authorize access="isAuthenticated()">
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
-						data-toggle="dropdown"> <span class="glyphicon glyphicon-user"></span>�
+						data-toggle="dropdown"> <span class="glyphicon glyphicon-user"></span> 
 							<strong><sec:authentication property="name" /></strong> <span
 							class="glyphicon glyphicon-chevron-down"></span>
 					</a>
@@ -56,7 +82,7 @@
 												<span class="glyphicon glyphicon-user icon-size"></span>
 											</p>
 										</div>
-										<div class="col-lg-8">
+										<div class="col-lg-12">
 											<p class="text-left">
 												<strong><sec:authentication property="name" /></strong>
 											</p>

@@ -67,7 +67,7 @@ public class EmpresaController {
 				model.put("empresa", empresa);
 				model.addAttribute("message", "Ya existe una empresa con este email");
 			}
-			return "redirect:/empresa/" + empresa.getId();
+			return "/welcome";
 		}
 	}
 
@@ -87,6 +87,7 @@ public class EmpresaController {
 			return VIEWS_EMPRESA_CREATE_OR_UPDATE;
 		} else {
 			try {
+				empresa.setId(empresaId);
 				this.empresaService.saveEmpresaUpdate(empresa);
 				model.addAttribute("message", "Sus datos se han actualizado correctamente");
 			} catch (DuplicatedTelephoneException ex) {
