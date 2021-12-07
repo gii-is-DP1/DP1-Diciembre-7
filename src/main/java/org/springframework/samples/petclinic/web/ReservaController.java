@@ -79,12 +79,12 @@ public class ReservaController {
 		dataBinder.setDisallowedFields("id");
 	}
 
-	@InitBinder
+	/*@InitBinder
 	public void initBinder(WebDataBinder binder) {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
 		dateFormat.setLenient(false);
 		binder.registerCustomEditor(LocalDate.class, new CustomDateEditor(dateFormat, false));
-	}
+	}*/
 
 	@InitBinder("reserva")
 	public void initReservaBinder(WebDataBinder dataBinder) {
@@ -114,18 +114,22 @@ public class ReservaController {
 
 	@PostMapping(value = "/preReserva/new")
 	public String processPreReservaFrom(@Valid PreReserva preReserva, BindingResult result, ModelMap model) {
+		Collection<TipoVehiculo> tiposVehiculo = vehiculoService.findTipoVehiculo();
 		if (result.hasErrors()) {
 			model.put("preReserva", preReserva);
+			model.put("tiposVehiculo", tiposVehiculo);
 			return "reserva/createPreReservaForm";
 
 		} else {
 			if (preReserva.getFechaInicio().isAfter(preReserva.getFechaFin())) {
 				model.put("preReserva", preReserva);
-				model.addAttribute("Message", "La fecha de fin debe ser mas tarde que la de inicio");
+				model.put("tiposVehiculo", tiposVehiculo);
+				model.addAttribute("message", "La fecha de fin debe ser mas tarde que la de inicio");
 				return "reserva/createPreReservaForm";
 			} else if (preReserva.getFechaInicio().isBefore(LocalDate.now())) {
 				model.put("preReserva", preReserva);
-				model.addAttribute("Message", "La fecha de inicio no puede estar en el pasado");
+				model.put("tiposVehiculo", tiposVehiculo);
+				model.addAttribute("message", "La fecha de inicio no puede estar en el pasado");
 				return "reserva/createPreReservaForm";
 			} else {
 				this.preReservaService.save(preReserva);
@@ -157,22 +161,36 @@ public class ReservaController {
 	@PostMapping(value = "/reserva/new")
 	public String processCreationForm(Cliente cliente, @Valid Reserva reserva, BindingResult result, ModelMap model)
 			throws DataAccessException, OverStockedVehicleException {
-		if (result.hasErrors()) {
-			model.addAttribute("Message", "Salta esto");
+		Collection<PreReserva> preReservas = this.preReservaService.findAllPreReservas();
+		PreReserva preReserva = (PreReserva) preReservas.toArray()[0];
+		Collection<Vehiculo> vehiculos = vehiculoService.findVehiculosPorCiudadYFechaDisponibles(preReserva.getCiudad(),
+				preReserva.getFechaInicio(), preReserva.getFechaFin(), preReserva.getTipoVehiculo());
+		Collection<Conductor> conductores = conductorService.findConductoresPorCiudadPermisoYFecha(
+				preReserva.getCiudad(), preReserva.getTipoVehiculo(), preReserva.getFechaInicio(),
+				preReserva.getFechaFin());
+		if (result.hasErrors() || reserva.getVehiculo() == null) {
+			model.addAttribute("message", "Los datos introducidos son incorrectos, vuelva a intentarlo");
 			model.put("reserva", reserva);
+			model.put("preReserva", preReserva);
+			model.put("vehiculos", vehiculos);
+			model.put("conductores", conductores);
 			return VIEWS_RESERVA_CREATE;
 		} else {
-			Collection<PreReserva> preReservas = this.preReservaService.findAllPreReservas();
-			PreReserva preReserva = (PreReserva) preReservas.toArray()[0];
 			reserva.setFechaInicio(preReserva.getFechaInicio());
 			reserva.setFechaFin(preReserva.getFechaFin());
 			if (reserva.getFechaInicio().isAfter(reserva.getFechaFin())) {
 				model.put("reserva", reserva);
-				model.addAttribute("Message", "La fecha de fin debe ser mas tarde que la de inicio");
+				model.put("preReserva", preReserva);
+				model.put("vehiculos", vehiculos);
+				model.put("conductores", conductores);
+				model.addAttribute("message", "La fecha de fin debe ser mas tarde que la de inicio");
 				return VIEWS_RESERVA_CREATE;
 			} else if (reserva.getFechaInicio().isBefore(LocalDate.now())) {
 				model.put("reserva", reserva);
-				model.addAttribute("Message", "La fecha de inicio no puede estar en el pasado");
+				model.put("preReserva", preReserva);
+				model.put("vehiculos", vehiculos);
+				model.put("conductores", conductores);
+				model.addAttribute("message", "La fecha de inicio no puede estar en el pasado");
 				return VIEWS_RESERVA_CREATE;
 			} else {
 				try {
@@ -184,8 +202,11 @@ public class ReservaController {
 					this.reservaService.saveReserva(reserva);
 					model.addAttribute("message", "La reserva se ha realizado con exito");
 				} catch (OverStockedVehicleException ex) {
-					result.rejectValue("stock", "ErrorAqui", "ErrorAqui");
+					result.rejectValue("stock", "Vehiculo fuera de stock", "Vehiculo fuera de stock");
 					model.put("reserva", reserva);
+					model.put("preReserva", preReserva);
+					model.put("vehiculos", vehiculos);
+					model.put("conductores", conductores);
 					model.addAttribute("message", "No queda ningun vehiculo de ese modelo y marca");
 					return VIEWS_RESERVA_CREATE;
 				}

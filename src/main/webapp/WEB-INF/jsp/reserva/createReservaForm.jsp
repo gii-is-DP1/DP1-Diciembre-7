@@ -11,14 +11,14 @@
 	<h2>
 		Nueva Reserva
 	</h2>
-	<p>${Message}</p>
+	<c:if test="${!(empty message)}">
+			<p>"${message}"</p>
+	</c:if>	
 	<form:form modelAttribute="reserva" class="form-horizontal"
 			id="add-reserva-form" method="post"
 			action="/cliente/${clienteid}/reserva/new">
 		<div class="form-group has-feedback">
 			<input type="hidden" name="id" value="${reserva.id}" />
-			<!--  <input type="hidden" name="fechaInicio" value="${preReserva.fechaInicio}" />
-			<input type="hidden" name="fechaFin" value="${preReserva.fechaFin}" />-->
 			<form:input path="fechaInicio" value="${preReserva.fechaInicio}" disabled="true" />
 			<form:input path="fechaFin" value="${preReserva.fechaFin}" disabled="true" />
 			<input type="hidden" name="ciudad" value="${preReserva.ciudad}" />
