@@ -11,6 +11,9 @@
 		<c:if test="${conductor['new']}">New </c:if>
 		Conductor
 	</h2>
+	<c:if test="${!(empty message)}">
+			<p>"${message}"</p>
+	</c:if>	
 	<form:form modelAttribute="conductor" class="form-horizontal"
 		id="add-conductor-form">
 		<c:choose>

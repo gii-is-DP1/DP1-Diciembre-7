@@ -27,6 +27,9 @@
 	<h2>
 		Nueva Reserva
 	</h2>
+	<c:if test="${!(empty message)}">
+			<p>"${message}"</p>
+	</c:if>	
 	<form:form modelAttribute="preReserva" class="form-horizontal"
 			id="add-preReserva-form" method="post"
 			action="/cliente/${clienteid}/preReserva/new">

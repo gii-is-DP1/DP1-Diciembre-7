@@ -11,6 +11,9 @@
 		<c:if test="${empresa['new']}">New </c:if>
 		Empresa
 	</h2>
+	<c:if test="${!(empty message)}">
+			<p>"${message}"</p>
+	</c:if>	
 	<form:form modelAttribute="empresa" class="form-horizontal"
 		id="add-empresa-form">
 		<c:choose>

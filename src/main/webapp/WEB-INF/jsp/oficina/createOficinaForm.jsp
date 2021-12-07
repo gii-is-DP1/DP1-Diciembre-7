@@ -11,6 +11,9 @@
 		<c:if test="${oficina['new']}">Nueva </c:if>
 		Oficina
 	</h2>
+	<c:if test="${!(empty message)}">
+			<p>"${message}"</p>
+	</c:if>	
 	<form:form modelAttribute="oficina" class="form-horizontal"
 		id="add-oficina-form">
 		<div class="form-group has-feedback">
