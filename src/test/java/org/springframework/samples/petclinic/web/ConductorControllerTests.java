@@ -77,7 +77,7 @@ public class ConductorControllerTests {
 		@Test
 	void testInitCreationForm() throws Exception {
 		mockMvc.perform(get("/conductor/new")).andExpect(status().isOk()).andExpect(model().attributeExists("conductor"))
-		.andExpect(view().name("conductor/createOrUpdateConductorForm"));
+				.andExpect(view().name("conductor/createOrUpdateConductorForm"));
 	}
 	
 	@WithMockUser(value = "spring")
