@@ -1,13 +1,12 @@
 package org.springframework.samples.petclinic.web;
 
 import org.assertj.core.util.Lists;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.configuration.SecurityConfiguration;
 import org.springframework.samples.petclinic.model.Cliente;
-import org.springframework.samples.petclinic.model.Owner;
-import org.springframework.samples.petclinic.service.VetService;
 import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -21,7 +20,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.ClienteService;
-import org.springframework.samples.petclinic.service.OwnerService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -110,7 +108,7 @@ class ClienteControllerTests {
 
         @WithMockUser(value = "spring")
 	@Test
-	void testInitUpdateOwnerForm() throws Exception {
+	void testInitUpdateClienteForm() throws Exception {
 		mockMvc.perform(get("/cliente/{clienteId}/edit", TEST_CLIENTE_ID)).andExpect(status().isOk())
 				.andExpect(model().attributeExists("cliente"))
 				.andExpect(model().attribute("cliente", hasProperty("nombre", is("Prueba"))))
@@ -123,7 +121,7 @@ class ClienteControllerTests {
 
         @WithMockUser(value = "spring")
 	@Test
-	void testProcessUpdateOwnerFormSuccess() throws Exception {
+	void testProcessUpdateClienteFormSuccess() throws Exception {
 		mockMvc.perform(post("/cliente/{clienteId}/edit", TEST_CLIENTE_ID)
 							.with(csrf())
 							.param("nombre", "Joe")
@@ -138,7 +136,7 @@ class ClienteControllerTests {
 
         @WithMockUser(value = "spring")
 	@Test
-	void testProcessUpdateOwnerFormHasErrors() throws Exception {
+	void testProcessUpdateClienteFormHasErrors() throws Exception {
 		mockMvc.perform(post("/cliente/{clienteId}/edit", TEST_CLIENTE_ID)
 							.with(csrf())
 							.param("nombre", "Joe")
@@ -151,7 +149,7 @@ class ClienteControllerTests {
 
         @WithMockUser(value = "spring")
 	@Test
-	void testShowOwner() throws Exception {
+	void testShowCliente() throws Exception {
 		mockMvc.perform(get("/cliente/{clienteId}", TEST_CLIENTE_ID)).andExpect(status().isOk())
 				.andExpect(model().attribute("cliente", hasProperty("nombre", is("Prueba"))))
 				.andExpect(model().attribute("cliente", hasProperty("telefono", is("608555102"))))
