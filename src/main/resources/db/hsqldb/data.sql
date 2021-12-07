@@ -65,7 +65,7 @@ INSERT INTO cliente VALUES (2, 'simeon@simeon.com','Simeon','123456789','Avenida
 INSERT INTO empresa VALUES (1, 'example@example.com','Universidad de Sevilla','665738445','España','empresa1');
 INSERT INTO empresa VALUES (2, 'ejemplo@ejemplo.com','Aytos','123456789','España','empresa2');
 
-INSERT INTO conductor VALUES(1, 'simeon@simeon.com','Simeon','123456789','Sevilla','12641431V','7',TRUE,FALSE,150.0,12.0,'conductor1');
+INSERT INTO conductor VALUES(1, 'simeon@simeon.com','Simeon','123456789','Sevilla','12641431V','7',FALSE,TRUE,150.0,12.0,'conductor1');
 INSERT INTO conductor VALUES(2, 'example@example.com','Javier','665738445','Sevilla','17473663B','9',TRUE,TRUE,180.0,20.0,'conductor2');
 
 INSERT INTO oficinas(id,ciudad,codigo_postal,direccion,empresa_id) VALUES(1,'Sevilla', 41400,'Avenida Reina Mercedes s/n', 1);

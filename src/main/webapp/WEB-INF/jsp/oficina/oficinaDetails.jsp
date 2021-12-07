@@ -31,7 +31,7 @@
 	<spring:url value="{oficinaId}/vehiculo/new" var="addUrl">
 		<spring:param name="oficinaId" value="${oficina.id}" />
 	</spring:url>
-	<a href="${fn:escapeXml(addUrl)}" class="btn btn-default">Add New
+	<a href="${fn:escapeXml(addUrl)}" class="btn btn-default">Añadir
 		Vehiculo</a>
 
 	<spring:url value="/empresa/{empresaId}/oficina/{oficinaId}/delete"
@@ -39,7 +39,7 @@
 		<spring:param name="oficinaId" value="${oficina.id}" />
 		<spring:param name="empresaId" value="${oficina.empresa.id}" />
 	</spring:url>
-	<a href="${fn:escapeXml(deleteUrl)}" class="btn btn-default">Delete
+	<a href="${fn:escapeXml(deleteUrl)}" class="btn btn-default">Eliminar
 		Oficina</a>
 
 	<br />
