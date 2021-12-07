@@ -56,7 +56,7 @@ public class ReservaController {
 	private final VehiculoService vehiculoService;
 
 	private final ConductorService conductorService;
-	
+
 	private final PreReservaService preReservaService;
 
 	@Autowired
@@ -78,13 +78,12 @@ public class ReservaController {
 	public void initClienteBinder(WebDataBinder dataBinder) {
 		dataBinder.setDisallowedFields("id");
 	}
-	
+
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
-	  SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-	  dateFormat.setLenient(false);
-	  binder.registerCustomEditor(LocalDate.class,
-	  new CustomDateEditor(dateFormat, false));
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+		dateFormat.setLenient(false);
+		binder.registerCustomEditor(LocalDate.class, new CustomDateEditor(dateFormat, false));
 	}
 
 	@InitBinder("reserva")
@@ -101,10 +100,10 @@ public class ReservaController {
 	public void initVehiculoBinder(WebDataBinder dataBinder) {
 		dataBinder.setDisallowedFields("id");
 	}
-	
-	
+
 	@GetMapping(value = "/preReserva/new")
-	public String initPreReservaForm(Map<String, Object> model, Cliente cliente) throws DataAccessException, OverStockedVehicleException {
+	public String initPreReservaForm(Map<String, Object> model, Cliente cliente)
+			throws DataAccessException, OverStockedVehicleException {
 		Collection<TipoVehiculo> tiposVehiculo = vehiculoService.findTipoVehiculo();
 		preReservaService.deleteAll();
 		PreReserva preReserva = new PreReserva();
@@ -112,14 +111,14 @@ public class ReservaController {
 		model.put("tiposVehiculo", tiposVehiculo);
 		return "reserva/createPreReservaForm";
 	}
-	
+
 	@PostMapping(value = "/preReserva/new")
 	public String processPreReservaFrom(@Valid PreReserva preReserva, BindingResult result, ModelMap model) {
 		if (result.hasErrors()) {
 			model.put("preReserva", preReserva);
 			return "reserva/createPreReservaForm";
-			
-		}else {
+
+		} else {
 			if (preReserva.getFechaInicio().isAfter(preReserva.getFechaFin())) {
 				model.put("preReserva", preReserva);
 				model.addAttribute("Message", "La fecha de fin debe ser mas tarde que la de inicio");
@@ -131,20 +130,21 @@ public class ReservaController {
 			} else {
 				this.preReservaService.save(preReserva);
 				model.put("preReserva", preReserva);
-				
+
 			}
 			return "redirect:/cliente/{clienteid}/reserva/new";
-			}
+		}
 	}
-	
+
 	@GetMapping(value = "/reserva/new")
 	public String initReservaForm(Map<String, Object> model, Cliente cliente) {
 		Collection<PreReserva> preReservas = this.preReservaService.findAllPreReservas();
 		PreReserva preReserva = (PreReserva) preReservas.toArray()[0];
 		Collection<Vehiculo> vehiculos = vehiculoService.findVehiculosPorCiudadYFechaDisponibles(preReserva.getCiudad(),
 				preReserva.getFechaInicio(), preReserva.getFechaFin(), preReserva.getTipoVehiculo());
-		Collection<Conductor> conductores = conductorService.findConductoresPorCiudadPermisoYFecha(preReserva.getCiudad(),
-				preReserva.getTipoVehiculo(), preReserva.getFechaInicio(), preReserva.getFechaFin());
+		Collection<Conductor> conductores = conductorService.findConductoresPorCiudadPermisoYFecha(
+				preReserva.getCiudad(), preReserva.getTipoVehiculo(), preReserva.getFechaInicio(),
+				preReserva.getFechaFin());
 		Reserva reserva = new Reserva();
 		cliente.addReserva(reserva);
 		model.put("preReserva", preReserva);
@@ -153,7 +153,7 @@ public class ReservaController {
 		model.put("conductores", conductores);
 		return VIEWS_RESERVA_CREATE;
 	}
-	
+
 	@PostMapping(value = "/reserva/new")
 	public String processCreationForm(Cliente cliente, @Valid Reserva reserva, BindingResult result, ModelMap model)
 			throws DataAccessException, OverStockedVehicleException {
@@ -204,7 +204,7 @@ public class ReservaController {
 
 	@GetMapping("/reserva/{reservaId}/delete")
 	public String deleteOficina(@PathVariable("reservaId") int reservaId, @PathVariable("clienteid") int clienteId,
-			ModelMap model) throws CloseDateBookingException{
+			ModelMap model) throws CloseDateBookingException {
 		Reserva r = reservaService.findReservaById(reservaId);
 		Cliente c = clienteService.findClienteById(clienteId);
 		if (r != null) {
@@ -226,9 +226,9 @@ public class ReservaController {
 			return "redirect:/reservas";
 		}
 	}
-	
-	@GetMapping(value ="/reservas")
-	public String allReservas(Cliente cliente, BindingResult result, Map<String,Object> model){
+
+	@GetMapping(value = "/reservas")
+	public String allReservas(Cliente cliente, BindingResult result, Map<String, Object> model) {
 		Collection<Reserva> results = this.reservaService.findReservasByCliente(cliente);
 		model.put("selections", results);
 		return "cliente/reservasList";
