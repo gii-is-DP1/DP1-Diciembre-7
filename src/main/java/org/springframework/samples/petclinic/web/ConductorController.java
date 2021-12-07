@@ -48,10 +48,10 @@ public class ConductorController {
 		this.conductorService = conductorService;
 		this.reservaService = reservaService;
 	}
-	@ModelAttribute("conductor")
+	/*@ModelAttribute("conductor")
 	public Conductor findConductor(@PathVariable("conductorId") int conductorId) {
 		return this.conductorService.findConductorById(conductorId);
-	}
+	}*/
 
 	@InitBinder
 	public void setAllowedFields(WebDataBinder dataBinder) {

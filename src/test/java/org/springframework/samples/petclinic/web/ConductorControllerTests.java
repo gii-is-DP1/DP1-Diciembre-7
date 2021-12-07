@@ -98,6 +98,100 @@ public class ConductorControllerTests {
 		.andExpect(view().name("/welcome"));
 	}
 	
+		@WithMockUser(value = "spring")
+	    @Test
+	void testProcessCreationFormHasErrors() throws Exception {
+		mockMvc.perform(post("/conductor/new")
+							.with(csrf())
+							.param("nombre", "Abel")
+							.param("dni", "81473182F")
+							.param("email", "jeje@jeje.com")
+							.param("experiencia", "3")
+							.param("permisoCoche","true")
+							.param("permisoBarco", "false")
+							.param("salarioBase", "200.0")
+							.param("salarioPorDia", "10.0")
+							.param("telefono", "387142931"))
+				.andExpect(status().isOk())
+				.andExpect(model().attributeHasErrors("conductor"))
+				.andExpect(model().attributeHasFieldErrors("conductor", "ciudad"))
+				.andExpect(view().name("conductor/createOrUpdateConductorForm"));
+	}
+		
+		   @WithMockUser(value = "spring")
+			@Test
+			void testInitUpdateConductorForm() throws Exception {
+				mockMvc.perform(get("/conductor/{conductorId}/edit", TEST_CONDUCTOR_ID)).andExpect(status().isOk())
+						.andExpect(model().attributeExists("conductor"))
+						.andExpect(model().attribute("conductor", hasProperty("nombre", is("Jose Manuel"))))
+						.andExpect(model().attribute("conductor", hasProperty("ciudad", is("Ecija"))))
+						.andExpect(model().attribute("conductor", hasProperty("dni", is("84380218A"))))
+						.andExpect(model().attribute("conductor", hasProperty("email", is("ego@ego.com"))))
+						.andExpect(model().attribute("conductor", hasProperty("experiencia", is(14))))
+						.andExpect(model().attribute("conductor", hasProperty("permisoCoche", is(true))))
+						.andExpect(model().attribute("conductor", hasProperty("permisoBarco", is(true))))
+						.andExpect(model().attribute("conductor", hasProperty("salarioBase", is(120.0))))
+						.andExpect(model().attribute("conductor", hasProperty("salarioPorDia", is(3.0))))
+						.andExpect(model().attribute("conductor", hasProperty("telefono", is("136942000"))))
+						.andExpect(view().name("conductor/createOrUpdateConductorForm"));
+			}
+
+		        @WithMockUser(value = "spring")
+			@Test
+			void testProcessUpdateConductorFormSuccess() throws Exception {
+				mockMvc.perform(post("/conductor/{conductorId}/edit", TEST_CONDUCTOR_ID)
+									.with(csrf())
+									.param("nombre", "Jose Manuel")
+									.param("ciudad", "Sevilla")
+									.param("dni", "84380218A")
+									.param("email", "ego@ego.com")
+									.param("experiencia", "14")
+									.param("permisoCoche", "true")
+									.param("permisoBarco", "true")
+									.param("salarioBase", "120.0")
+									.param("salarioPorDia", "3.0")
+									.param("telefono", "136942000"))
+						.andExpect(status().is3xxRedirection())
+						.andExpect(view().name("redirect:/conductor/{conductorId}"));
+			}
+			
+
+		        @WithMockUser(value = "spring")
+			@Test
+			void testProcessUpdateConductorFormHasErrors() throws Exception {
+				mockMvc.perform(post("/conductor/{conductorId}/edit", TEST_CONDUCTOR_ID)
+									.with(csrf())
+									.param("nombre", "Jose Manuel")
+									.param("dni", "84380218A")
+									.param("email", "ego@ego.com")
+									.param("permisoCoche", "true")
+									.param("permisoBarco", "true")
+									.param("salarioBase", "120.0")
+									.param("salarioPorDia", "3.0")
+									.param("telefono", "136942000"))
+						.andExpect(status().isOk())
+						.andExpect(model().attributeHasErrors("conductor"))
+						.andExpect(model().attributeHasFieldErrors("conductor", "ciudad"))
+						.andExpect(view().name("conductor/createOrUpdateConductorForm"));
+			}
+
+		        @WithMockUser(value = "spring")
+			@Test
+			void testShowConductor() throws Exception {
+				mockMvc.perform(get("/conductor/{conductorId}", TEST_CONDUCTOR_ID)).andExpect(status().isOk())
+				.andExpect(model().attribute("conductor", hasProperty("nombre", is("Jose Manuel"))))
+				.andExpect(model().attribute("conductor", hasProperty("ciudad", is("Ecija"))))
+				.andExpect(model().attribute("conductor", hasProperty("dni", is("84380218A"))))
+				.andExpect(model().attribute("conductor", hasProperty("email", is("ego@ego.com"))))
+				.andExpect(model().attribute("conductor", hasProperty("experiencia", is(14))))
+				.andExpect(model().attribute("conductor", hasProperty("permisoCoche", is(true))))
+				.andExpect(model().attribute("conductor", hasProperty("permisoBarco", is(true))))
+				.andExpect(model().attribute("conductor", hasProperty("salarioBase", is(120.0))))
+				.andExpect(model().attribute("conductor", hasProperty("salarioPorDia", is(3.0))))
+				.andExpect(model().attribute("conductor", hasProperty("telefono", is("136942000"))))
+						.andExpect(view().name("conductor/conductorDetails"));
+			}
+	
 	
 
 }
