@@ -18,7 +18,10 @@ public interface VehiculoRepository extends CrudRepository<Vehiculo, Integer>{
 	Collection<TipoVehiculo> findTipoVehiculo() throws DataAccessException;
 	
 	@Query("SELECT vehiculos FROM Oficina oficina WHERE oficina.ciudad =:ciudad")
-	public Collection<Collection<Vehiculo>> findVehiculosPorCiudad(@Param("ciudad") String ciudad);	
+	public Collection<Collection<Vehiculo>> findVehiculosPorCiudad(@Param("ciudad") String ciudad);
+	
+	@Query("SELECT vehiculo FROM Vehiculo vehiculo WHERE vehiculo.modelo =:modelo")
+	public Collection<Vehiculo> findVehiculosPorModelo(@Param("modelo") String modelo);
 	
 	Vehiculo findById(int id) throws DataAccessException;
 	

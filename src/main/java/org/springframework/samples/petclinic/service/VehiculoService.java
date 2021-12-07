@@ -45,6 +45,11 @@ public class VehiculoService {
 	public Vehiculo findVehiculoById(int id) throws DataAccessException {
 		return vehiculoRepository.findById(id);
 	}
+	
+	@Transactional(readOnly = true)
+	public Collection<Vehiculo> findVehiculosPorModelo(String modelo) throws DataAccessException {
+		return vehiculoRepository.findVehiculosPorModelo(modelo);
+	}
 
 	@Transactional(readOnly = true)
 	public Collection<Vehiculo> findVehiculosPorCiudadYFechaDisponibles(String ciudad, LocalDate fechaInicio,

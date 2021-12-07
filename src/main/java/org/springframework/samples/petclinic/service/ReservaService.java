@@ -36,6 +36,11 @@ public class ReservaService {
 	public Collection<Reserva> findReservasByConductor(Conductor conductor) throws DataAccessException {
 		return reservaRepository.findReservasByConductor(conductor);
 	}
+	
+	@Transactional(readOnly = true)
+	public Collection<Reserva> findReservasByCiudad(String ciudad) throws DataAccessException {
+		return reservaRepository.findReservasByCiudad(ciudad);
+	}
 
 	@Transactional(readOnly = true)
 	public Collection<Reserva> findReservasByVehiculo(Vehiculo vehiculo) throws DataAccessException {

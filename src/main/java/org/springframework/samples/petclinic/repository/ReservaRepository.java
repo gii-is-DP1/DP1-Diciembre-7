@@ -21,6 +21,9 @@ public interface ReservaRepository extends CrudRepository<Reserva, Integer>{
 	
 	@Query("SELECT reserva FROM Reserva reserva WHERE reserva.vehiculo=:vehiculo")
 	Collection<Reserva> findReservasByVehiculo(@Param("vehiculo") Vehiculo vehiculo) throws DataAccessException;
+	
+	@Query("SELECT reserva FROM Reserva reserva WHERE reserva.ciudad=:ciudad")
+	Collection<Reserva> findReservasByCiudad(@Param("ciudad") String ciudad) throws DataAccessException;
 
 	Reserva findById(int id) throws DataAccessException;
 	

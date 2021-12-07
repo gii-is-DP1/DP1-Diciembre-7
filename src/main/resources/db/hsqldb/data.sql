@@ -59,14 +59,14 @@ INSERT INTO types VALUES (4, 'snake');
 INSERT INTO types VALUES (5, 'bird');
 INSERT INTO types VALUES (6, 'hamster');
 
-INSERT INTO cliente VALUES (1, 'example@example.com','Javier','665738445','Avenida Reina Mercedes s/n','17473663B','cliente1');
+INSERT INTO cliente VALUES (1, 'example@example.com','Javier','112345678','Avenida Reina Mercedes s/n','98765432B','cliente1');
 INSERT INTO cliente VALUES (2, 'simeon@simeon.com','Simeon','123456789','Avenida Reina Mercedes s/n','12641431V','cliente2');
 
-INSERT INTO empresa VALUES (1, 'example@example.com','Universidad de Sevilla','665738445','España','empresa1');
+INSERT INTO empresa VALUES (1, 'example@example.com','Universidad de Sevilla','124354768','España','empresa1');
 INSERT INTO empresa VALUES (2, 'ejemplo@ejemplo.com','Aytos','123456789','España','empresa2');
 
 INSERT INTO conductor VALUES(1, 'simeon@simeon.com','Simeon','123456789','Sevilla','12641431V','7',FALSE,TRUE,150.0,12.0,'conductor1');
-INSERT INTO conductor VALUES(2, 'example@example.com','Javier','665738445','Sevilla','17473663B','9',TRUE,TRUE,180.0,20.0,'conductor2');
+INSERT INTO conductor VALUES(2, 'example@example.com','Javier','112345678','Sevilla','98765432B','9',TRUE,TRUE,180.0,20.0,'conductor2');
 
 INSERT INTO oficinas(id,ciudad,codigo_postal,direccion,empresa_id) VALUES(1,'Sevilla', 41400,'Avenida Reina Mercedes s/n', 1);
 INSERT INTO oficinas(id,ciudad,codigo_postal,direccion,empresa_id) VALUES(2,'Madrid', 41400,'Plaza del Sol', 1);
@@ -82,6 +82,8 @@ INSERT INTO vehiculos(id,marca,modelo,precio_base,precio_por_dia,stock,tipo_vehi
 INSERT INTO vehiculos(id,marca,modelo,precio_base,precio_por_dia,stock,tipo_vehiculo_id) VALUES (7,'Ford','Focus',150.0,15.0,50,2);
 INSERT INTO vehiculos(id,marca,modelo,precio_base,precio_por_dia,stock,tipo_vehiculo_id) VALUES (8,'Dacia','Sandero',220.0,20.0,10,2);
 INSERT INTO vehiculos(id,marca,modelo,precio_base,precio_por_dia,stock,tipo_vehiculo_id) VALUES (9,'Nissan','Qashqai',250.0,22.0,35,2);
+
+INSERT INTO reservas(id,fecha_inicio,fecha_fin,precio_final,ciudad,cliente_id,vehiculo_id,conductor_id) VALUES (1, '2020-10-12', '2020-10-15', 200.0,'Sevilla',1,1,2);
 
 INSERT INTO vehiculos_oficinas(oficina_id,vehiculo_id) VALUES (1,1);
 INSERT INTO vehiculos_oficinas(oficina_id,vehiculo_id) VALUES (1,2);
