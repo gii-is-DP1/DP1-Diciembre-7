@@ -141,7 +141,7 @@ public class ConductorController {
 			}
 			try {
 				this.conductorService.saveConductorUpdate(conductorToUpdate);
-				model.addAttribute("Message", "Se ha actualizado correctamente");
+				model.addAttribute("message", "Se ha actualizado correctamente");
 			} catch (DuplicatedTelephoneException ex1) {
 				result.rejectValue("telefono", "duplicate", "already exists");
 				model.put("conductor", conductor);

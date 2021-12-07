@@ -15,6 +15,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.support.MutableSortDefinition;
 import org.springframework.beans.support.PropertyComparator;
@@ -42,9 +43,11 @@ public class Conductor extends Actor{
 	private Integer experiencia;
 	
 	@Column(name = "permisoCoche")
+	@NotNull
 	private Boolean permisoCoche;
 	
 	@Column(name = "permisoBarco")
+	@NotNull
 	private Boolean permisoBarco;
 	
 	@Column(name = "salarioBase")

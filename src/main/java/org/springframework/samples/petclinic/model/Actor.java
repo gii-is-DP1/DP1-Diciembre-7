@@ -38,7 +38,6 @@ public class Actor extends BaseEntity {
 	protected String nombre;
 
 	@Column(name = "telefono", unique = true)
-	@NotBlank
 	@Digits(fraction = 0, integer = 9)
 	protected String telefono;
 
